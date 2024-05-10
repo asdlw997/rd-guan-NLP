@@ -66,7 +66,7 @@ export default class Dictionary {//词典
             ModulePartSpeech.addUnit(unit);
         })
         let ModuleMethodObj = new Module();
-        this.partSpeech.map((obj) => {
+        this.methodObj.map((obj) => {
             let list = Object.values(obj);
             let unit = new Unit(...list);
             ModuleMethodObj.addUnit(unit);
@@ -76,6 +76,24 @@ export default class Dictionary {//词典
         domain.addModule(ModulePartSpeech);
         domain.addModule(ModuleMethodObj);
         return domain;
+    }
+    fromDomain(domain) {
+        let keys=["a","b","c","d"]
+        let ModuleTree = domain.find(2);
+        this.data = ModuleTree.list.map((unit) => {
+            let list = unit.list.map((value, index) => [keys[index], value])
+            return Object.fromEntries(list);
+        }) 
+        let ModulePartSpeech = domain.find(3);
+        this.partSpeech = ModulePartSpeech.list.map((unit) => {
+            let list = unit.list.map((value, index) => [keys[index], value])
+            return Object.fromEntries(list);
+        }) 
+        let ModuleMethodObj = domain.find(4);
+        this.methodObj = ModuleMethodObj.list.map((unit) => {
+            let list = unit.list.map((value, index) => [keys[index], value])
+            return Object.fromEntries(list);
+        }) 
     }
     findCharacterById(characterId) {
         let obj = this.data.find(obj => {

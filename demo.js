@@ -9,6 +9,8 @@ let partSpeech = [];
 let methodObj = [];
 let res;
 
+
+
 let dictionary = new Dictionary(data, partSpeech, methodObj);
 dictionary.addWoldFullInfo("节点A", "名词", "节点A(对象)", "O");
 dictionary.addWoldFullInfo("节点B", "名词", "节点B(对象)", "O");
@@ -57,7 +59,7 @@ command.input[0] = switch1.output[0]
 command.run()
 res = command.output[0]
 
-debugger
+//debugger
 
 //debugger
 //词典转领域
@@ -65,7 +67,7 @@ import Domain from "./str/Domain.js";
 let domain;  
 domain = dictionary.toDomain();
 
-debugger
+//debugger
 //测试节点合并
 const func = (word, wordId) => { console.log(wordId, word); };//定义打印函数
 
@@ -82,15 +84,18 @@ dictionary2.addWoldFullInfo("节点C", "动词", "节点C(方法)", "M");
 dictionary2.addWoldFullInfo("节点D", "名词", "节点D(对象)", "O");
 console.log("词典1")
 dictionary1.listWord("", null, func)
-debugger
+//debugger
 dictionary1.combine(dictionary2);
 console.log("词典合并后")
 dictionary1.listWord("", null, func)
 
+//debugger
+
+
+//
+let testiDctionary = new Dictionary(data, partSpeech, methodObj);
+testiDctionary.fromDomain(domain)
 debugger
-
-
-
 
 
 
