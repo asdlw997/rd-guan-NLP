@@ -5,10 +5,19 @@ import Domain from "./str/Domain.js";
 
 
 export default class Dictionary {//词典
-    constructor(data, partSpeech, methodObj) {
-        this.data = data.slice();
-        this.partSpeech = partSpeech.slice();
-        this.methodObj = methodObj.slice();
+    constructor() {
+        this.input = []//0 新加词信息列表 1 词典领域(可传入空领域)
+        this.output = []//0 词典领域
+        this.data = [];
+        this.partSpeech =[];
+        this.methodObj =[];
+    }
+    run() {
+        this.fromDomain(this.input[1]);
+        this.input[0].map((woldFullInfo) => {
+            this.addWoldFullInfo(...woldFullInfo)
+        })
+        this.output[0] = this.toDomain();
     }
     listWord(src, nodeId, func) {//对每一个词字符串调用 funcCallback()
         let node=this.data.find((obj) => {
@@ -80,20 +89,28 @@ export default class Dictionary {//词典
     fromDomain(domain) {
         let keys=["a","b","c","d"]
         let ModuleTree = domain.find(2);
-        this.data = ModuleTree.list.map((unit) => {
-            let list = unit.list.map((value, index) => [keys[index], value])
-            return Object.fromEntries(list);
-        }) 
+        if (ModuleTree !== null) {
+            this.data = ModuleTree.list.map((unit) => {
+                let list = unit.list.map((value, index) => [keys[index], value])
+                return Object.fromEntries(list);
+            }) 
+        }
+        
         let ModulePartSpeech = domain.find(3);
-        this.partSpeech = ModulePartSpeech.list.map((unit) => {
-            let list = unit.list.map((value, index) => [keys[index], value])
-            return Object.fromEntries(list);
-        }) 
+        if (ModulePartSpeech !== null) {
+            this.partSpeech = ModulePartSpeech.list.map((unit) => {
+                let list = unit.list.map((value, index) => [keys[index], value])
+                return Object.fromEntries(list);
+            }) 
+        }
+
         let ModuleMethodObj = domain.find(4);
-        this.methodObj = ModuleMethodObj.list.map((unit) => {
-            let list = unit.list.map((value, index) => [keys[index], value])
-            return Object.fromEntries(list);
-        }) 
+        if (ModuleMethodObj !== null) {
+            this.methodObj = ModuleMethodObj.list.map((unit) => {
+                let list = unit.list.map((value, index) => [keys[index], value])
+                return Object.fromEntries(list);
+            })
+        }
     }
     findCharacterById(characterId) {
         let obj = this.data.find(obj => {
