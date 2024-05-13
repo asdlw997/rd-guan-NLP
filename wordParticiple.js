@@ -414,7 +414,7 @@ export class Tokenizer {
         return result;
     }
     run() {
-        //this.fromDomain(this.input[1])
+        this.fromDomain(this.input[1])
         this.output[0] = this.splitString(this.input[0]);
     }
     findCharacterById(characterId) {

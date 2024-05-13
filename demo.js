@@ -27,19 +27,15 @@ dictionary.addWoldFullInfo(",", "符号", ",结构", "C");
 dictionary.addWoldFullInfo("，", "符号", "，结构", "C");
 dictionary.addWoldFullInfo("。", "符号", "。结构", "C");
 
-
+domain = dictionary.toDomain();
 //Tokenizer节点
 let tokenizer = new Tokenizer();
 //"连接节点A的输入和节点B的输出，创建节点C。"
-tokenizer.input[0] = "删除节点A的输出。删除节点B。";
 //tokenizer.input[0] = "节点A和节点B。";
-domain = dictionary.toDomain();
-let testiDctionary = new Dictionary(data, partSpeech, methodObj);
-testiDctionary.fromDomain(domain)
-tokenizer.data = dictionary.data;
-tokenizer.partSpeech = dictionary.partSpeech;
-tokenizer.methodObj = dictionary.methodObj;
+
+tokenizer.input[0] = "删除节点A的输出。删除节点B。";
 tokenizer.input[1] = domain;
+
 tokenizer.run();
 res = JSON.stringify(tokenizer.output[0], null, 2);
 console.log("\" ", tokenizer.input[0], "\"的分词结果是", res)
@@ -64,7 +60,7 @@ let command = new Command();
 command.input[0] = switch1.output[0]
 command.run()
 res = command.output[0]
-
+console.log("转指令是", JSON.stringify(command.output[0], null, 2))
 //debugger
 
 //debugger
