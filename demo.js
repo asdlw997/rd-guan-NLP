@@ -8,7 +8,7 @@ let data = [];
 let partSpeech = [];
 let methodObj = [];
 let res;
-
+let domain;  
 
 
 let dictionary = new Dictionary(data, partSpeech, methodObj);
@@ -33,7 +33,13 @@ let tokenizer = new Tokenizer();
 //"连接节点A的输入和节点B的输出，创建节点C。"
 tokenizer.input[0] = "删除节点A的输出。删除节点B。";
 //tokenizer.input[0] = "节点A和节点B。";
-tokenizer.input[1] = dictionary;
+domain = dictionary.toDomain();
+let testiDctionary = new Dictionary(data, partSpeech, methodObj);
+testiDctionary.fromDomain(domain)
+tokenizer.data = dictionary.data;
+tokenizer.partSpeech = dictionary.partSpeech;
+tokenizer.methodObj = dictionary.methodObj;
+tokenizer.input[1] = domain;
 tokenizer.run();
 res = JSON.stringify(tokenizer.output[0], null, 2);
 console.log("\" ", tokenizer.input[0], "\"的分词结果是", res)
@@ -64,7 +70,7 @@ res = command.output[0]
 //debugger
 //词典转领域
 import Domain from "./str/Domain.js";
-let domain;  
+
 domain = dictionary.toDomain();
 
 //debugger
@@ -93,8 +99,7 @@ dictionary1.listWord("", null, func)
 
 
 //
-let testiDctionary = new Dictionary(data, partSpeech, methodObj);
-testiDctionary.fromDomain(domain)
+
 debugger
 
 
