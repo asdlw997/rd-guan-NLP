@@ -16,7 +16,7 @@ export default class Command {
         let res=[]
         let resList = []
         let moduleId, unitIndex, bitIndex, level, stack = [], statsList;
-        let bitValue
+        let bitValue,nowUnit
         for (let i = 1; i < domain1.find(rootId).list.length; i++) {
             res = []
             moduleId = rootId;
@@ -25,25 +25,25 @@ export default class Command {
 
             do {
                 if (domain1.find(moduleId).list.length > unitIndex) {
-                    bitValue = domain1.find(moduleId).list[unitIndex].list[bitIndex];
+                    nowUnit = domain1.find(moduleId).list[unitIndex];
                 }
                 else {
                     break;
                 }
-                if (bitValue !== 0) {
+                if (nowUnit.list[bitIndex + 1] !== undefined && nowUnit.list[bitIndex + 1] !== '') {//不是unit中最后一个有效数据
                     level = domain1.find(moduleId).list[unitIndex].list[3];
                     stack.push([moduleId, unitIndex, bitIndex + 1, level])//下次访问下一位
                     //初始化
-                    moduleId = bitValue;
+                    moduleId = nowUnit.list[bitIndex];
                     unitIndex = 1;
                     bitIndex = 0;
 
                 }
-                else {
+                else {//unit中最后一个有效数据
                     if (bitIndex === 0) {
-                        let bit3 = domain1.find(moduleId).list[unitIndex].list[3]
-                        if (bit3 !== '0') {
-                            res.push(domain1.find(moduleId).list[unitIndex].list[3]);
+                        let bit0 = domain1.find(moduleId).list[unitIndex].list[0]
+                        if (bit0 !== '0') {
+                            res.push(domain1.find(moduleId).list[unitIndex].list[0]);
                         }
                         [moduleId, unitIndex, bitIndex, level] = stack.pop();
                     } else {

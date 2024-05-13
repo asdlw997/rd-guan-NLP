@@ -19,9 +19,9 @@ export default class Unit{
             d="";
         }
         this.list=[a,b,c,d];
-        if(d==""){
-            this.checkData();
-        }
+        //if(d==""){
+        //    this.checkData();
+        //}
     }
     find(n){
         let res=this.list[n-1];
