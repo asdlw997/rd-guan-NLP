@@ -22,6 +22,7 @@ let woldFullInfo = [
     ["把", "把", "把结构", "C"],
     ["和", "和", "和结构", "C"],
     ["的", "的", "的结构", "C"],
+    ["到", "到", "到结构", "C"],
     ["输入", "名词", "输入(对象)", "O"],
     ["输出", "名词", "输出(对象)", "O"],
     [",", "符号", ",结构", "C"],
@@ -53,7 +54,7 @@ let tokenizer = new Tokenizer();
 //"连接节点A的输入和节点B的输出，创建节点C。"
 //tokenizer.input[0] = "节点A和节点B。";
 
-tokenizer.input[0] = "删除节点A的输出。删除节点B。";
+tokenizer.input[0] = "节点A节点A。";
 tokenizer.input[1] = dictionary.output[0];
 
 tokenizer.run();

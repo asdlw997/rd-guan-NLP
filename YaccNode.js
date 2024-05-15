@@ -19,7 +19,7 @@ export default class Yacc{
         this. sentence=new Array();
 
         this.root = 0;
-        this.input = [];//inputId说明,  0:wordsIds(分词结果) 1:ruleStack(词典) 
+        this.input = [];//inputId说明,  0:wordsIds(分词结果) 1:ruleStack(文法) 
         this.output = [];//outputId说明 0:tree(语法树)
     }
 
@@ -207,7 +207,7 @@ export default class Yacc{
     wordFront(){
 
         if(stack.n>this.wordsIds.length-1) return;
-        stack.tem.push( this.wordsIds[stack.n].type)
+        stack.tem.push( this.wordsIds[stack.n].type) 
         stack.objs.push(this.wordsIds[stack.n].data)
         stack.n++
 
