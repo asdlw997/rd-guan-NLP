@@ -54,7 +54,7 @@ let tokenizer = new Tokenizer();
 //"连接节点A的输入和节点B的输出，创建节点C。"
 //tokenizer.input[0] = "节点A和节点B。";
 
-tokenizer.input[0] = "节点A节点A。";
+tokenizer.input[0] = "创建节点A的输出。";
 tokenizer.input[1] = dictionary.output[0];
 
 tokenizer.run();
@@ -76,6 +76,7 @@ let switch1 = new Switch();
 switch1.input[0] = yacc.output[0]
 switch1.run()
 res = switch1.output[0]
+debugger
 //转指令
 let command = new Command();
 command.input[0] = switch1.output[0]

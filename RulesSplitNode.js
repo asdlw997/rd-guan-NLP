@@ -32,7 +32,6 @@ statement
 ;
 结构A
  : 名词A 的 名词A                     {return new TreeNode ('的名词',1, 3)}  
- | 名词A                              {return new TreeNode ('名词',1)}
 ;
 名词A                                                             
   : 名词A 名词                       {return new TreeNode ('多属性名词',1, 2)} 
