@@ -59,12 +59,12 @@ export default class Yacc{
             return "";
         }
         for(let i=this.ruleStack.length;i>0;i--){
-            let rules=this.ruleStack[i-1];
-            for(let n=rules.rules.length;n>0;n--){
-               let rule=rules.rules[n-1];
+            let rules=this.ruleStack[i-1];//取出一组文法
+            for(let n=rules.rules.length;n>0;n--){ 
+                let rule = rules.rules[n - 1];//取出一组文法 的一条
                let isz=0;
                 for(let l=0;l<rule.length-1;l++){
-                    let is=isz>stack.tem.length-1&&rule.length-1>stack.tem.length&&stack. words.length>0
+                    let is=isz>stack.tem.length-1&&rule.length-1>stack.tem.length&&stack. words.length>0//条件
                     if(is){
                         if(isWordFront===false){
                             beiObj= JSON.parse(JSON.stringify(stack));
