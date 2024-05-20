@@ -7,7 +7,7 @@ import Unit from "./str/Unit.js";
 let data = [];
 let partSpeech = [];
 let methodObj = [];
-let res;
+let res,tree1,tree2;
 let domain;  
 
 
@@ -75,7 +75,15 @@ console.log("语法树是",JSON.stringify(yacc.output[0], null, 2))
 let switch1 = new Switch();
 switch1.input[0] = yacc.output[0]
 switch1.run()
-res = switch1.output[0]
+tree1 = switch1.output[0]
+//重复流程
+tokenizer.input[0] = "创建节点B的输入。";
+tokenizer.run();
+yacc.input[0] = tokenizer.output[0];
+yacc.run();
+switch1.input[0] = yacc.output[0]
+switch1.run();
+tree2 = switch1.output[0]
 debugger
 //转指令
 let command = new Command();
