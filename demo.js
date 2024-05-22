@@ -78,7 +78,7 @@ switch1.run()
 tree1 = switch1.output[0]
 //重复流程
 //创建节点B的输入。
-tokenizer.input[0] = "创建节点A的输出。";
+tokenizer.input[0] = "创建节点A的输入。";
 tokenizer.run();
 yacc.input[0] = tokenizer.output[0];
 yacc.run();
