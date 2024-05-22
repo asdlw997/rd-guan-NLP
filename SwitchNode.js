@@ -10,6 +10,7 @@ export default class Switch{
         this.domain= new Domain();
         this.input = []//0 tree
         this.output = []//0 处理后的domain
+        this.usedId = 1;//为了避免重复id
     }
     /**
      * 输出树格式
@@ -36,9 +37,11 @@ export default class Switch{
 
     run() {
         let tree = this.input[0]
-      this.domain=new  Domain();
+        this.domain = new Domain();
+        this.domain.current_id = this.usedId;//为了避免重复id
         this.genIntCode(tree)
         this.output[0] = this.domain;
+        this.usedId = this.domain.current_id;//为了避免重复id
         
     }
     genIntCode ( tree)  {

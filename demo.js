@@ -77,14 +77,20 @@ switch1.input[0] = yacc.output[0]
 switch1.run()
 tree1 = switch1.output[0]
 //重复流程
-tokenizer.input[0] = "创建节点B的输入。";
+//创建节点B的输入。
+tokenizer.input[0] = "创建节点A的输出。";
 tokenizer.run();
 yacc.input[0] = tokenizer.output[0];
 yacc.run();
 switch1.input[0] = yacc.output[0]
 switch1.run();
 tree2 = switch1.output[0]
-debugger
+//debugger
+//集合操作
+import SetOperator from "./SetOperations.js"
+let setOperator = new SetOperator()
+setOperator.toElements(tree1)
+setOperator.compareElements([2, 1], [11,1], tree1, tree2);
 //转指令
 let command = new Command();
 command.input[0] = switch1.output[0]
@@ -96,6 +102,7 @@ console.log("转指令是", JSON.stringify(command.output[0], null, 2))
 //debugger
 //词典转领域
 import Domain from "./str/Domain.js";
+
 
 domain = dictionary.toDomain();
 

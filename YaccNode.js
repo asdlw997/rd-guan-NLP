@@ -24,7 +24,13 @@ export default class Yacc{
     }
 
 
-    run(){
+    run() {
+        stack.tem = new Array()
+        stack.objs = new Array()
+
+        stack.tems = new Array();
+        stack.words = new Array();
+        stack.n = 0;
         this.ruleStack = this.input[1];
         this.wordsIds = this.input[0];
         let ruleStack = this.input[1];

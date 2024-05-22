@@ -16,7 +16,9 @@ export default class Command {
         let res=[]
         let resList = []
         let moduleId, unitIndex, bitIndex, level, stack = [], statsList;
-        let bitValue,nowUnit
+        let bitValue, nowUnit
+        let keys = Object.keys(domain1.list)//获取根Id 依赖key顺序 不好
+        rootId=keys[1]
         for (let i = 1; i < domain1.find(rootId).list.length; i++) {
             res = []
             moduleId = rootId;
