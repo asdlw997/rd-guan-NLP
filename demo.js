@@ -54,7 +54,7 @@ let tokenizer = new Tokenizer();
 //"连接节点A的输入和节点B的输出，创建节点C。"
 //tokenizer.input[0] = "节点A和节点B。";
 
-tokenizer.input[0] = "创建节点A的输出。";
+tokenizer.input[0] = "创建节点A的输出。删除节点A。把节点A删除。";
 tokenizer.input[1] = dictionary.output[0];
 
 tokenizer.run();
@@ -78,7 +78,7 @@ switch1.run()
 tree1 = switch1.output[0]
 //重复流程
 //创建节点B的输入。
-tokenizer.input[0] = "创建节点A的输入。";
+tokenizer.input[0] = "删除节点A。创建节点A的输出。创建节点A的输入。";
 tokenizer.run();
 yacc.input[0] = tokenizer.output[0];
 yacc.run();
@@ -86,11 +86,23 @@ switch1.input[0] = yacc.output[0]
 switch1.run();
 tree2 = switch1.output[0]
 //debugger
+
 //集合操作
 import SetOperator from "./SetOperations.js"
 let setOperator = new SetOperator()
 setOperator.toElements(tree1)
-setOperator.compareElements([2, 1], [11,1], tree1, tree2);
+//交集
+domain = setOperator.intersection(tree2, tree1)
+debugger
+//并集
+domain = setOperator.union(tree2, tree1)
+debugger
+//差集
+domain = setOperator.difference(tree2, tree1)
+debugger
+domain = new Domain();
+setOperator.domainAddTree(domain, [2, 1], tree1)
+debugger
 //转指令
 let command = new Command();
 command.input[0] = switch1.output[0]
