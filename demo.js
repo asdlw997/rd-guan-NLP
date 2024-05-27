@@ -101,7 +101,7 @@ debugger
 domain = setOperator.difference(tree2, tree1)
 debugger
 domain = new Domain();
-setOperator.domainAddTree(domain, [2, 1], tree1)
+setOperator.domainAddTree(domain, [2, 2], tree1)
 debugger
 //转指令
 let command = new Command();

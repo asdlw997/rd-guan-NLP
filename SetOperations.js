@@ -79,7 +79,7 @@ export default class SetOperator {
             resDomain.list[resRootList[0]].list[unitId1] = domain1.list[resRootList[0]].list[unitId1];
             this.domainAddTree(resDomain, [resRootList[0], unitId1], domain1);
         })
-        //debugger
+        debugger
         return resDomain;
     }
     domainAddTree(domain, elements,treeDomain) {//未包含根的unit和module
@@ -92,6 +92,8 @@ export default class SetOperator {
                 nowUnit = treeDomain.find(moduleId).list[unitIndex];
             }
             else {
+                //读到了一个纯符号 或者树结构错误
+                domain.list[moduleId] = treeDomain.find(moduleId);
                 break;
             }
             isLastBit1 = !(nowUnit.list[bitIndex + 1] !== undefined && nowUnit.list[bitIndex + 1] !== '')
@@ -107,7 +109,7 @@ export default class SetOperator {
             }
             
             if (isLastBit1) {//unit中最后一个有效数据
-                //记录id
+                //复制module
                 if (domain.list[moduleId] === undefined) {
                     domain.list[moduleId] = treeDomain.find(moduleId);
                 }

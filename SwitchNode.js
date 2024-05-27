@@ -82,7 +82,7 @@ export default class Switch{
                 blk1 = this.genIntCode (root.data[0]);
                 cond = this.genIntCode (root.data[1]);
                 module.addUnit(new Unit('1'))
-                module.addUnit(new Unit( blk1,cond,"2"))
+                module.addUnit(new Unit(blk1, cond, "2"))//2表示跟动词相关
                 id1=this.domain.addModule(  module);
                 return id1;
                 break;
@@ -92,7 +92,7 @@ export default class Switch{
                 cond = this.genIntCode (root.data[1]);
                 blk2 = this.genIntCode (root.data[2]);
                 module.addUnit(new Unit('1'))
-                module.addUnit(new Unit( blk1,cond,blk2,"2"))
+                module.addUnit(new Unit(blk1, cond, blk2, "2"))//2表示跟动词相关
                 id1=this.domain.addData( module);
                 this.domain.moduleAddUnit(1,new Unit(id1))
                 return id1;
@@ -101,7 +101,7 @@ export default class Switch{
                 module= new Module();
                 blk1 = this.genIntCode (root.data[0]);
                 module.addUnit(new Unit('1'))
-                module.addUnit(new Unit( blk1,"0"))
+                module.addUnit(new Unit(blk1, "0"))//0表示是对象
                 id1 = this.domain.addModule( module);
                 return id1;
                 break;
@@ -110,7 +110,7 @@ export default class Switch{
                 blk1 = this.genIntCode (root.data[0]);
 
                 module.addUnit(new Unit('1'))
-                module.addUnit(new Unit( blk1,"0"))
+                module.addUnit(new Unit(blk1, "0"))//0表示是对象
                 id1 = this.domain.addModule(module);
                 return id1;
                 break;
@@ -119,7 +119,7 @@ export default class Switch{
                 blk1 = this.genIntCode (root.data[0]);
                 blk2 = this.genIntCode (root.data[1]);
                 module.addUnit(new Unit('1'))
-                module.addUnit(new Unit( blk1,blk2,"1"))
+                module.addUnit(new Unit(blk1, blk2, "1"))
                 id1 = this.domain.addModule( module);
                 return id1;
                 break;
@@ -151,7 +151,7 @@ export default class Switch{
                 module= new Module();
                 blk1 = this.genIntCode (root.data[0]);
                 module.addUnit(new Unit('1'))
-                module.addUnit(new Unit( blk1,"1"))
+                module.addUnit(new Unit(blk1, "1"))//1表示词性是动词?
                 id1 = this.domain.addModule( module);
                 return id1;
                 break;
@@ -160,8 +160,8 @@ export default class Switch{
                 blk1 = this.genIntCode (root.data[0]);
                 blk2 = this.genIntCode (root.data[1]);
                 module.addUnit(new Unit('1'))
-                module.addUnit(new Unit( blk1,"1"))
-                module.addUnit(new Unit( blk2,"1"))
+                module.addUnit(new Unit(blk1, "1"))//1表示词性是动词?
+                module.addUnit(new Unit(blk2, "1"))//1表示词性是动词?
                 id1 = this.domain.addModule( module);
                 return id1;
                 break;
