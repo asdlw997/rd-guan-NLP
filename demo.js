@@ -9,7 +9,7 @@ let data = [];
 let partSpeech = [];
 let methodObj = [];
 let res,tree1,tree2;
-let domain;  
+let module,domain;  
 
 
 let dictionary = new Dictionary();
@@ -55,7 +55,10 @@ let id = dictionary.findWordId('节点A')
 let matchCriteria = new MatchCriteria();
 matchCriteria.input[0] = [['节点A', '节点B'], ['输入', '输出'], ['输出', '输入'], ['创建', '添加']];
 matchCriteria.input[1] = dictionary;
-res = matchCriteria.run()
+module = matchCriteria.run()
+debugger
+res = matchCriteria.isSynonyms('节点A', '输入', module, dictionary);
+res = matchCriteria.isSynonyms('输出', '输入', module, dictionary);
 debugger
 //Tokenizer节点
 let tokenizer = new Tokenizer();

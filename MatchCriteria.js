@@ -47,6 +47,25 @@ export default class MatchCriteria {
         })
         return module;
     }
+    isSynonyms(wordA, wordB, module, dictionary) {
+        let wordIdA = dictionary.findWordId(wordA)
+        let wordIdB = dictionary.findWordId(wordB)
+        if (wordIdA < wordIdB) {
+            if (module.list.some(unit => {
+                return unit.list[1] === wordIdA && unit.list[2] === wordIdB
+            })) {
+                return true
+            }
+        } else {
+            if (module.list.some(unit => {
+                return unit.list[1] === wordIdB && unit.list[2] === wordIdA
+            })) {
+                return true
+            }
+        }
+        
+        return false
+    }
     getLegalId(module) {
         let i = 0;
         let obj;
