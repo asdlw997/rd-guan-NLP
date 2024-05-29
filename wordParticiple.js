@@ -123,6 +123,16 @@ export default class Dictionary {//词典
         }
         return null;
     }
+    findWordId(word) {
+        let nodeId = null;
+        for (let character of word) {
+            nodeId = this.findNextNodeId(character, nodeId)
+            if (nodeId === null) {
+                break;
+            }
+        }
+        return nodeId;
+    }
     findCharacterId(character) {
          let obj = this.data.find(obj => {
              const keys = Object.keys(obj); // 获取对象的键数组
@@ -134,6 +144,7 @@ export default class Dictionary {//词典
          }
          return null;
     }
+    
     findNextNodeId(character, nodeId) {
         let characterId = this.findCharacterId(character);
         let obj = this.data.find(obj => {

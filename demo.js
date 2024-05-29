@@ -4,6 +4,7 @@ import RulesSplit from "./RulesSplitNode.js"
 import Yacc from "./YaccNode.js"
 import Switch from "./SwitchNode.js"
 import Unit from "./str/Unit.js";
+import MatchCriteria from"./MatchCriteria.js"
 let data = [];
 let partSpeech = [];
 let methodObj = [];
@@ -48,7 +49,14 @@ dictionary.addWoldFullInfo(",", "符号", ",结构", "C");
 dictionary.addWoldFullInfo("，", "符号", "，结构", "C");
 dictionary.addWoldFullInfo("。", "符号", "。结构", "C");*/
 
-dictionary.run();
+dictionary.run()
+let id = dictionary.findWordId('节点A')
+//近义词
+let matchCriteria = new MatchCriteria();
+matchCriteria.input[0] = [['节点A', '节点B'], ['输入', '输出'], ['输出', '输入'], ['创建', '添加']];
+matchCriteria.input[1] = dictionary;
+res = matchCriteria.run()
+debugger
 //Tokenizer节点
 let tokenizer = new Tokenizer();
 //"连接节点A的输入和节点B的输出，创建节点C。"
