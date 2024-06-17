@@ -10,7 +10,10 @@ export default class Dictionary {//词典
         this.output = []//0 词典领域
         this.data = [];
         this.partSpeech =[];
-        this.methodObj =[];
+        this.methodObj = [];
+        this.scenes = [];
+        this.relatedInformation = [];
+        
     }
     run() {
         this.fromDomain(this.input[1]);
@@ -337,10 +340,38 @@ export default class Dictionary {//词典
         } else {
             //如果词性存在 不覆盖
         }
-
-
         
     }
+    addWoldFullInfo_1part1methodObj_WithScenes(word, part, methodObj, markMethodObj, scenes, mark) {//一个词性对应一种方法或对象
+
+        this.addWoldFullInfo_1part1methodObj(word, part, methodObj, markMethodObj);
+        //[场景模块id, 场景，标志，方法对象id]
+        let wordId = this.findWordId(word)
+        let obj = this.partSpeech.find(obj => {
+            const keys = Object.keys(obj); // 获取对象的键数组
+            return (obj[keys[1]] === wordId) && (obj[keys[2]] === part)
+        })
+        let keys = Object.keys(obj);
+        let partId = obj[keys[0]];
+        obj = this.methodObj.find(obj => {
+            const keys = Object.keys(obj); // 获取对象的键数组
+            return (obj[keys[3]] === partId) && (obj[keys[1]] === methodObj)
+        })
+        keys = Object.keys(obj);
+        let methodObjId = obj[keys[0]];
+        obj = this.scenes.find(obj => {
+            const keys = Object.keys(obj); // 获取对象的键数组
+            return (obj[keys[1]] === scenes) && (obj[keys[2]] === mark) && (obj[keys[3]] === methodObjId)
+        })
+        if (obj === undefined) {
+            let scenesId = this.getLegalId(this.scenes);
+            this.scenes.push({ a: scenesId, b: scenes, c: mark, d: methodObjId })
+        } else {
+            //如果场景和标志都相同 不覆盖
+        }
+        
+    }
+
 }
 
 export class Tokenizer {

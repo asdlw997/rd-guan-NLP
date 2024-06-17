@@ -11,6 +11,12 @@ let methodObj = [];
 let res,tree1,tree2;
 let module,domain;  
 
+let testDictionary = new Dictionary();
+testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点A", "名词", "节点A(对象)", "O", "网页编程", "类");
+debugger
+testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点A", "名词", "节点A(对象)", "O", "网页编程", "类");
+debugger
+
 
 let dictionary = new Dictionary();
 let woldFullInfo = [
