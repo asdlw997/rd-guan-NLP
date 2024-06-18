@@ -12,11 +12,18 @@ let res,tree1,tree2;
 let module,domain;  
 
 let testDictionary = new Dictionary();
-testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点A", "名词", "节点A(对象)", "O", "网页编程", "类");
+testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点A", "名词", null, null, "网页编程", "类");
 debugger
-testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点A", "名词", "节点A(对象)", "O", "网页编程", "类");
+testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点B", "名词", "节点B(对象)", "O", null, null);
 debugger
-
+testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点C", "名词", null, null, null, null);
+debugger
+testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点D", "名词", "节点D(对象)", "O", "网页编程", "类");
+debugger
+testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点D", "名词", "节点D(对象)", "O", "网页编程2", "类");
+debugger
+testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点D", "名词", "节点D(对象)", "O", "网页编程", "类");
+debugger
 
 let dictionary = new Dictionary();
 let woldFullInfo = [

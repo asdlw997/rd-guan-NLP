@@ -13,6 +13,11 @@ export default class Dictionary {//词典
         this.methodObj = [];
         this.scenes = [];
         this.relatedInformation = [];
+        //设置
+        this.defaultMethodObj = "默认对象";         //默认对象或方法
+        this.defaultMarkMethodObj = "默认对象标志"; //默认对象或方法标志
+        this.defaultScenes = "默认场景";            //默认场景标志
+        this.defaultMarkScenes = "默认场景标志";    //默认场景标志
         
     }
     run() {
@@ -324,9 +329,14 @@ export default class Dictionary {//词典
         })
         let partSpeechId;
         let methodObjId;
+        
         if (obj === undefined) {
             partSpeechId = this.getLegalId(this.partSpeech);
             this.partSpeech.push({ a: partSpeechId, b: wordId, c: part, d: null })
+            if (methodObj === undefined || methodObj === null) {
+                methodObj=this.defaultMethodObj ;
+                markMethodObj=this.defaultMarkMethodObj ;
+            }
             obj = this.methodObj.find(obj => {
                 const keys = Object.keys(obj); // 获取对象的键数组
                 return (obj[keys[3]] === partSpeechId) && (obj[keys[1]] === methodObj)
@@ -342,7 +352,7 @@ export default class Dictionary {//词典
         }
         
     }
-    addWoldFullInfo_1part1methodObj_WithScenes(word, part, methodObj, markMethodObj, scenes, mark) {//一个词性对应一种方法或对象
+    addWoldFullInfo_1part1methodObj_WithScenes(word, part, methodObj, markMethodObj, scenes, markScenes) {//一个词性对应一种方法或对象还有场景
 
         this.addWoldFullInfo_1part1methodObj(word, part, methodObj, markMethodObj);
         //[场景模块id, 场景，标志，方法对象id]
@@ -353,19 +363,27 @@ export default class Dictionary {//词典
         })
         let keys = Object.keys(obj);
         let partId = obj[keys[0]];
+        if (methodObj === undefined || methodObj === null) {//判断对象非空
+            methodObj = this.defaultMethodObj;
+            markMethodObj = this.defaultMarkMethodObj;
+        }
         obj = this.methodObj.find(obj => {
             const keys = Object.keys(obj); // 获取对象的键数组
             return (obj[keys[3]] === partId) && (obj[keys[1]] === methodObj)
         })
         keys = Object.keys(obj);
         let methodObjId = obj[keys[0]];
+        if (scenes === undefined || scenes === null) {//判断场景非空
+            scenes = this.defaultScenes;
+            markScenes = this.defaultMarkScenes;
+        }
         obj = this.scenes.find(obj => {
             const keys = Object.keys(obj); // 获取对象的键数组
-            return (obj[keys[1]] === scenes) && (obj[keys[2]] === mark) && (obj[keys[3]] === methodObjId)
+            return (obj[keys[1]] === scenes) && (obj[keys[2]] === markScenes) && (obj[keys[3]] === methodObjId)
         })
         if (obj === undefined) {
             let scenesId = this.getLegalId(this.scenes);
-            this.scenes.push({ a: scenesId, b: scenes, c: mark, d: methodObjId })
+            this.scenes.push({ a: scenesId, b: scenes, c: markScenes, d: methodObjId })
         } else {
             //如果场景和标志都相同 不覆盖
         }
