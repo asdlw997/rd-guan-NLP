@@ -268,6 +268,54 @@ export default class Dictionary {//词典
         } while (obj!==undefined)
         return i;
     }
+    listWordScenes(word) {
+        let wordId = this.findWordId(word);
+        if (wordId === null || wordId === undefined) {
+            return []//异常出口
+        }
+        let partList = this.partSpeech.filter(obj => {
+            const keys = Object.keys(obj); 
+            return (obj[keys[1]] === wordId)
+        })
+        let partListId
+        if (partList !== undefined && partList !== null) {//词性非空
+            partListId = partList.map(obj => {
+                const keys = Object.keys(obj);
+                return obj[keys[0]]
+            })
+        } else {
+            return []//异常出口
+        }
+        let methodObjList = this.methodObj.filter(obj => {
+            const keys = Object.keys(obj); 
+            return  partListId.includes(obj[keys[3]])
+        })
+        let methodObjListId
+        if (methodObjList !== undefined && methodObjList !== null) {//对象非空
+            methodObjListId = methodObjList.map(obj => {
+                const keys = Object.keys(obj); 
+                return obj[keys[0]]
+            })
+        } else {
+            return []//异常出口
+        }
+        let scenesList = this.scenes.filter(obj => {
+            const keys = Object.keys(obj); 
+            return methodObjListId.includes(obj[keys[3]])
+        })
+        if (scenesList === undefined || scenesList === null) {//场景为空
+            return []//异常出口
+        }
+        let scenesNameList = scenesList.map(obj => {
+            const keys = Object.keys(obj);
+            return obj[keys[1]]
+        })
+        return scenesNameList //正常出口
+    }
+    isWordHasScenes(word, scenes) {
+        let scenesNameList = this.listWordScenes(word);
+        return scenesNameList.includes(scenes)
+    }
     addWord(word) {
         let nowNodeId = null;
         let lastNodeId = null;

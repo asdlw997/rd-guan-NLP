@@ -24,7 +24,12 @@ testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点D", "名词", "
 debugger
 testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点D", "名词", "节点D(对象)", "O", "网页编程", "类");
 debugger
-
+res = testDictionary.listWordScenes("节点D");
+debugger
+res = testDictionary.isWordHasScenes("节点D", "网页编程")
+debugger
+res = testDictionary.isWordHasScenes("节点D", "网页编程1")
+debugger
 let dictionary = new Dictionary();
 let woldFullInfo = [
     ["节点A", "名词", "节点A(对象)", "O"],
