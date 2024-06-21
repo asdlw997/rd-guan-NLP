@@ -14,6 +14,7 @@ export default class Dictionary {//词典
         this.scenes = [];
         this.relatedInformation = [];
         //设置
+        this.defaultpartSpeech = '名词'             //默认词性
         this.defaultMethodObj = "默认对象";         //默认对象或方法
         this.defaultMarkMethodObj = "默认对象标志"; //默认对象或方法标志
         this.defaultScenes = "默认场景";            //默认场景标志
@@ -401,40 +402,77 @@ export default class Dictionary {//词典
         
     }
     addWoldFullInfo_1part1methodObj_WithScenes(word, part, methodObj, markMethodObj, scenes, markScenes) {//一个词性对应一种方法或对象还有场景
+        if (part === undefined || part === null) {//判断词性非空
+            part = this.defaultpartSpeech;
+        }
 
-        this.addWoldFullInfo_1part1methodObj(word, part, methodObj, markMethodObj);
-        //[场景模块id, 场景，标志，方法对象id]
-        let wordId = this.findWordId(word)
-        let obj = this.partSpeech.find(obj => {
-            const keys = Object.keys(obj); // 获取对象的键数组
-            return (obj[keys[1]] === wordId) && (obj[keys[2]] === part)
-        })
-        let keys = Object.keys(obj);
-        let partId = obj[keys[0]];
         if (methodObj === undefined || methodObj === null) {//判断对象非空
             methodObj = this.defaultMethodObj;
             markMethodObj = this.defaultMarkMethodObj;
         }
-        obj = this.methodObj.find(obj => {
-            const keys = Object.keys(obj); // 获取对象的键数组
+        this.addWoldFullInfo(word, part, methodObj, markMethodObj);
+        //[场景模块id, 场景，标志，方法对象id]
+        let wordId = this.findWordId(word)
+        let partData = this.partSpeech.find(obj => {
+            const keys = Object.keys(obj); 
+            return (obj[keys[1]] === wordId) && (obj[keys[2]] === part)
+        })
+        let keys = Object.keys(partData);
+        let partId = partData[keys[0]];
+        
+        let methodObjData = this.methodObj.find(obj => {//查找方法
+            const keys = Object.keys(obj); 
             return (obj[keys[3]] === partId) && (obj[keys[1]] === methodObj)
         })
-        keys = Object.keys(obj);
-        let methodObjId = obj[keys[0]];
-        if (scenes === undefined || scenes === null) {//判断场景非空
+        keys = Object.keys(methodObjData);
+        let methodObjId = methodObjData[keys[0]];
+        if (scenes === undefined || scenes === null) {
             scenes = this.defaultScenes;
             markScenes = this.defaultMarkScenes;
         }
-        obj = this.scenes.find(obj => {
-            const keys = Object.keys(obj); // 获取对象的键数组
+        let scenesData = this.scenes.find(obj => {
+            const keys = Object.keys(obj); 
             return (obj[keys[1]] === scenes) && (obj[keys[2]] === markScenes) && (obj[keys[3]] === methodObjId)
         })
-        if (obj === undefined) {
-            let scenesId = this.getLegalId(this.scenes);
-            this.scenes.push({ a: scenesId, b: scenes, c: markScenes, d: methodObjId })
+        if (scenesData === undefined) {
+            //如果场景指向默认对象则将场景指向新对象
+            let scenesDataDefault = this.scenes.find(sobj => {
+                const keys = Object.keys(sobj); 
+                
+                let isMethodObjDefault = this.methodObj.some(mobj => {
+                    const keys = Object.keys(mobj); 
+                    return (mobj[keys[1]] === this.defaultMethodObj) && mobj[keys[0]] === sobj[keys[3]] && mobj[keys[3]] === partData['a'];
+                })
+                return (sobj[keys[1]] === scenes) && (sobj[keys[2]] === markScenes) && isMethodObjDefault
+            })
+            if (scenesDataDefault !== undefined || scenesDataDefault === null) {
+                scenesDataDefault['d'] = methodObjData['a']
+            } else {
+                let scenesId = this.getLegalId(this.scenes);
+                this.scenes.push({ a: scenesId, b: scenes, c: markScenes, d: methodObjId })
+                scenesData = this.scenes.find(obj => {
+                    const keys = Object.keys(obj);
+                    return (obj[keys[1]] === scenes) && (obj[keys[2]] === markScenes) && (obj[keys[3]] === methodObjId)
+                })
+            }
+
+            
         } else {
             //如果场景和标志都相同 不覆盖
         }
+        //如果场景指向默认对象则将场景指向新对象
+        /*let methodObj = this.methodObj.find(_obj => {
+            const _keys = Object.keys(_obj); 
+            const keys = Object.keys(obj); 
+            return _obj[_keys[1]] === obj[keys[3]]
+        })
+        if (methodObj !== undefined && methodObj !== null) {
+            const keys = Object.keys(methodObj); 
+            if (methodObj[keys[1]] === this.defaultMethodObj) {
+                const _keys = Object.keys(obj); 
+                obj[_keys[3]]=
+            }
+        }*/
         
     }
 

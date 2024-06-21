@@ -4,15 +4,20 @@ import RulesSplit from "./RulesSplitNode.js"
 import Yacc from "./YaccNode.js"
 import Switch from "./SwitchNode.js"
 import Unit from "./str/Unit.js";
-import MatchCriteria from"./MatchCriteria.js"
+import MatchCriteria from "./MatchCriteria.js"
+import KnowledgeGraph from"./KnowledgeGraph.js"
 let data = [];
 let partSpeech = [];
 let methodObj = [];
 let res,tree1,tree2;
-let module,domain;  
-
+let module, domain;  
+let testKnowledgeGraph = new KnowledgeGraph();
+testKnowledgeGraph.addTriad("网页编程", "节点A", "网页编程", "连接", "网页编程", "节点B")
+debugger
 let testDictionary = new Dictionary();
 testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点A", "名词", null, null, "网页编程", "类");
+debugger
+testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点A", "名词", "节点A(对象)", "O", "网页编程", "类");
 debugger
 testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点B", "名词", "节点B(对象)", "O", null, null);
 debugger
