@@ -232,7 +232,7 @@ export default class Dictionary {//词典
             const keys = Object.keys(obj); // 获取对象的键数组
             return (obj[keys[3]] === partSpeechId);
         });
-        if (objs === []) {
+        if (objs.length === 0) {
             return null;
         }
         

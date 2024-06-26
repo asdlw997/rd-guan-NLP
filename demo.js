@@ -5,7 +5,8 @@ import Yacc from "./YaccNode.js"
 import Switch from "./SwitchNode.js"
 import Unit from "./str/Unit.js";
 import MatchCriteria from "./MatchCriteria.js"
-import KnowledgeGraph from"./KnowledgeGraph.js"
+import KnowledgeGraph from "./KnowledgeGraph.js"
+import LogicDetection from "./Logicdetection.js"
 let data = [];
 let partSpeech = [];
 let methodObj = [];
@@ -13,7 +14,43 @@ let res,tree1,tree2;
 let module, domain;  
 let testKnowledgeGraph = new KnowledgeGraph();
 testKnowledgeGraph.addTriad("网页编程", "节点A", "网页编程", "连接", "网页编程", "节点B")
+testKnowledgeGraph.addTriad("网页编程", "节点C", "网页编程", "连接", "网页编程", "节点B")
+testKnowledgeGraph.addTriad("网页编程", "节点B", "网页编程", "连接", "网页编程", "节点D")
+testKnowledgeGraph.addTriad("", "节点B", "网页编程", "连接", "网页编程", "节点D")
 debugger
+
+res = testKnowledgeGraph.filterWithScenes("网页编程", "节点A", "网页编程", "连接", "网页编程", "节点B")
+debugger
+testKnowledgeGraph.scenes = '空字符串'
+res = testKnowledgeGraph.filterWithScenes("网页编程", "", "网页编程", "连接", "网页编程", "节点B")
+debugger
+testKnowledgeGraph.scenes = '多一个参数'
+let mask = [true, true, true, true, true, true]
+res = testKnowledgeGraph.filterWithScenes("", "节点B", "网页编程", "连接", "网页编程", "节点D", mask)
+debugger
+
+res = testKnowledgeGraph.filter1("网页编程", "节点B")
+debugger
+res = testKnowledgeGraph.filter1("网页编程", "节点A")
+debugger
+res = testKnowledgeGraph.filter1("网页编程1", "节点B")
+debugger
+let logicDetection = new LogicDetection();
+logicDetection.input[0] = testKnowledgeGraph;
+logicDetection.input[1] = "网页编程"
+logicDetection.input[2] = "节点B"
+logicDetection.run()
+res = logicDetection.output[0]
+debugger
+logicDetection.input[1] = "网页编程"
+logicDetection.input[2] = "节点A"
+logicDetection.run()
+res = logicDetection.output[0]
+debugger
+
+
+
+
 let testDictionary = new Dictionary();
 testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点A", "名词", null, null, "网页编程", "类");
 debugger

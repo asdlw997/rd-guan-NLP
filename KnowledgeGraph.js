@@ -6,6 +6,7 @@ export default class KnowledgeGraph {
         this.output = []//0 module
         this.TriadsList = []
         this.dictionary = new Dictionary()
+        this.scenes="" //“”：默认场景    “空字符串”：空字符串      “多一个参数”：新引进参数 
     }
     setDictionary(dictionary) {
         this.dictionary = dictionary;//复制引用！！！
@@ -25,6 +26,52 @@ export default class KnowledgeGraph {
             this.dictionary.addWoldFullInfo_1part1methodObj_WithScenes(word3, null, null, null, scenes3, null)
         }
         this.TriadsList.push([scenes1, word1, scenes2,word2, scenes3, word3])
+    }
+    filterWithScenes(...args) {//(scenes1, word1, scenes2,word2, scenes3, word3,[mask])
+        let Triads=[]
+        if (this.scenes === '') {//全匹配（默认）
+            Triads = this.TriadsList.filter(Triad => {
+                let stat = true
+                for (let i = 0; i < 6; i++) {
+                    stat = stat && (Triad[i] === args[i])
+                }
+                return stat 
+            })
+        }
+        if (this.scenes === '空字符串') {
+            Triads = this.TriadsList.filter(Triad => {
+                let stat=true
+                for (let i = 0; i < 6; i++) {
+                    if (args[i] !== '') {//匹配非空字符串
+                        stat = stat && (Triad[i] === args[i])
+                    }
+                }
+                return stat 
+            })
+        }
+        if (this.scenes === '多一个参数') {
+            let mask = args[6]
+            Triads = this.TriadsList.filter(Triad => {
+                let stat = true
+                for (let i = 0; i < 6; i++) {
+                    if (mask[i] === true) {//匹配mask中为真的位置
+                        stat = stat && (Triad[i] === args[i])
+                    }
+                }
+                return stat 
+            })
+        }
+        return Triads 
+    }
+    filter1(scenes, word) {
+        let HeaderTriads=this.TriadsList.filter(Triad => {
+            return (Triad[0] === scenes) && (Triad[1] === word)
+        })
+        let Tail = this.TriadsList.filter(Triad => {
+            return (Triad[4] === scenes) && (Triad[5] === word)
+        })
+        
+        return HeaderTriads.concat(Tail);
     }
     toModule() {
         let scenesId
