@@ -1,4 +1,5 @@
 import Module from "./str/Module.js";
+import Unit from "./str/Unit.js";
 import Dictionary from "./wordParticiple.js";
 export default class KnowledgeGraph {
     constructor() {
@@ -26,6 +27,11 @@ export default class KnowledgeGraph {
             this.dictionary.addWoldFullInfo_1part1methodObj_WithScenes(word3, null, null, null, scenes3, null)
         }
         this.TriadsList.push([scenes1, word1, scenes2,word2, scenes3, word3])
+    }
+    addTriadList(triadList) {
+        triadList.forEach(triad => {
+            this.addTriad(...triad)
+        })
     }
     filterWithScenes(...args) {//(scenes1, word1, scenes2,word2, scenes3, word3,[mask])
         let Triads=[]
@@ -73,19 +79,54 @@ export default class KnowledgeGraph {
         
         return HeaderTriads.concat(Tail);
     }
+    combine(TriadsList) {
+        this.addTriadList(TriadsList)
+    }
     toModule() {
         let scenesId
         let datamodule = new Module();
         this.TriadsList.forEach(Triad => {
-            scenesId = getLegalId(datamodule)
-            this.TriadsList.push([scenesId, Triad[0], Triad[1], Triad[2]])
-            scenesId = getLegalId(datamodule)
-            this.TriadsList.push([scenesId, Triad[3], Triad[4], Triad[5]])
+            scenesId = this.getLegalId(datamodule)
+            datamodule.list.push(new Unit( scenesId, Triad[0], Triad[1], Triad[2]))
+            scenesId = this.getLegalId(datamodule)
+            datamodule.list.push(new Unit(scenesId, Triad[3], Triad[4], Triad[5]))
         })
         return datamodule;
     }
     fromModule(datamodule) {
+        let triadsList = []
+        
+        let sortedUnits = this.sortAndTraverseById(datamodule)
+        this.processOddAndEvenPairs(sortedUnits, (oddItem, evenItem) => {
+            triadsList.push([oddItem[1], oddItem[2], oddItem[3], evenItem[1], evenItem[2], evenItem[3]])
+        })
+        return triadsList
+    }
+    processOddAndEvenPairs(items,func) {
+        let i = 0;
 
+        while (i < items.length) {
+            // 处理id是奇数的元素
+            if (items[i][0] % 2 !== 0) {
+                const oddItem = items[i];
+                let evenItem = null;
+
+                // 检查下一个元素是否存在且为偶数
+                if (i + 1 < items.length && items[i + 1][0] % 2 === 0) {
+                    evenItem = items[i + 1];
+                    items.splice(i, 2);  // 移除奇数和偶数元素
+                } else {
+                    items.splice(i, 1);  // 仅移除奇数元素
+                }
+
+                // 处理奇数和偶数元素
+                func(oddItem, evenItem)
+            } else {
+                i++;  // 当前元素不是奇数，继续下一个
+            }
+        }
+
+        return items;
     }
     isTriadExist(scenes1, word1, scenes2, word2, scenes3, word3) {
         return this.TriadsList.some(Triad => {
@@ -102,10 +143,17 @@ export default class KnowledgeGraph {
         let obj;
         do {
             i++;
-            obj = datamodule.data.find(unit => {
-                return (unit[0] === i);
+            obj = datamodule.list.find(unit => {
+                return (unit.list[0] === i);
             });
         } while (obj !== undefined)
         return i;
+    }
+    sortAndTraverseById(module) {
+        let sortedUnits = module.list.sort((a, b) => a.list[0] - b.list[0]);
+        sortedUnits = sortedUnits.map(unit => {
+            return unit.list
+        })
+        return sortedUnits
     }
 }

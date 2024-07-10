@@ -10,47 +10,54 @@ import LogicDetection from "./Logicdetection.js"
 let data = [];
 let partSpeech = [];
 let methodObj = [];
-let res,tree1,tree2;
+let res, tree1, tree2;
+let triadList=[]
 let module, domain;  
 let testKnowledgeGraph = new KnowledgeGraph();
 testKnowledgeGraph.addTriad("网页编程", "节点A", "网页编程", "连接", "网页编程", "节点B")
 testKnowledgeGraph.addTriad("网页编程", "节点C", "网页编程", "连接", "网页编程", "节点B")
 testKnowledgeGraph.addTriad("网页编程", "节点B", "网页编程", "连接", "网页编程", "节点D")
 testKnowledgeGraph.addTriad("", "节点B", "网页编程", "连接", "网页编程", "节点D")
-debugger
-
+let testKnowledgeGraph1 = new KnowledgeGraph()
+testKnowledgeGraph1.addTriad("网页编程", "节点E", "网页编程", "连接", "网页编程", "节点D")
+testKnowledgeGraph1.addTriad("网页编程", "节点F", "网页编程", "连接", "网页编程", "节点D")
+//debugger
+module = testKnowledgeGraph.toModule()
+//debugger
+triadList=testKnowledgeGraph.fromModule(module)
+//debugger
 res = testKnowledgeGraph.filterWithScenes("网页编程", "节点A", "网页编程", "连接", "网页编程", "节点B")
-debugger
+//debugger
 testKnowledgeGraph.scenes = '空字符串'
 res = testKnowledgeGraph.filterWithScenes("网页编程", "", "网页编程", "连接", "网页编程", "节点B")
-debugger
+//debugger
 testKnowledgeGraph.scenes = '多一个参数'
 let mask = [true, true, true, true, true, true]
 res = testKnowledgeGraph.filterWithScenes("", "节点B", "网页编程", "连接", "网页编程", "节点D", mask)
-debugger
+//debugger
 
 res = testKnowledgeGraph.filter1("网页编程", "节点B")
-debugger
+//debugger
 res = testKnowledgeGraph.filter1("网页编程", "节点A")
-debugger
+//debugger
 res = testKnowledgeGraph.filter1("网页编程1", "节点B")
-debugger
+//debugger
 let logicDetection = new LogicDetection();
 logicDetection.input[0] = testKnowledgeGraph;
 logicDetection.input[1] = "网页编程"
 logicDetection.input[2] = "节点B"
 logicDetection.run()
 res = logicDetection.output[0]
-debugger
+//debugger
 logicDetection.input[1] = "网页编程"
 logicDetection.input[2] = "节点A"
 logicDetection.run()
 res = logicDetection.output[0]
-debugger
+//debugger
 
 
 
-
+/*
 let testDictionary = new Dictionary();
 testDictionary.addWoldFullInfo_1part1methodObj_WithScenes("节点A", "名词", null, null, "网页编程", "类");
 debugger
@@ -72,6 +79,7 @@ res = testDictionary.isWordHasScenes("节点D", "网页编程")
 debugger
 res = testDictionary.isWordHasScenes("节点D", "网页编程1")
 debugger
+*/
 let dictionary = new Dictionary();
 let woldFullInfo = [
     ["节点A", "名词", "节点A(对象)", "O"],
@@ -116,10 +124,10 @@ let matchCriteria = new MatchCriteria();
 matchCriteria.input[0] = [['节点A', '节点B'], ['输入', '输出'], ['输出', '输入'], ['创建', '添加']];
 matchCriteria.input[1] = dictionary;
 module = matchCriteria.run()
-debugger
+//debugger
 res = matchCriteria.isSynonyms('节点A', '输入', module, dictionary);
 res = matchCriteria.isSynonyms('输出', '输入', module, dictionary);
-debugger
+//debugger
 //Tokenizer节点
 let tokenizer = new Tokenizer();
 //"连接节点A的输入和节点B的输出，创建节点C。"
@@ -141,7 +149,7 @@ yacc.input[0] = tokenizer.output[0];
 yacc.input[1] = rulesSplit.rules;
 yacc.run();
 console.log("语法树是",JSON.stringify(yacc.output[0], null, 2))
-
+debugger
 //处理语法树
 let switch1 = new Switch();
 switch1.input[0] = yacc.output[0]
