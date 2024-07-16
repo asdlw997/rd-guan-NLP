@@ -21,7 +21,9 @@ export default class Yacc{
         this.root = 0;
         this.input = [];//inputId说明,  0:wordsIds(分词结果) 1:ruleStack(文法) 
         this.output = [];//outputId说明 0:tree(语法树)
-        this.terminalSet = ['名词', '的', '和', '动词','符号']
+        this.terminalSet = ['名词', '的', '和', '动词', '符号']
+        this.embeddedLevels = 0//当前嵌套等级
+        this.embeddedLevelsLimit = 10//嵌套等级限制
     }
 
 
@@ -63,14 +65,14 @@ export default class Yacc{
             let idListNew = []
             do {
 
-                idList.forEach(id => {
+                idList.forEach(id => {//把idList中的每个id对应的rules加入idListNew中
                     let rules=[]
-                    let obj=ruleStack.find(obj => {
+                    let obj = ruleStack.find(obj => {//找到id对应的obj
                         return obj.id === id
                     })
-                    idListNew.push(...this.first(obj.rules))
+                    idListNew.push(...this.firsts(obj.rules))//把id对应的rules加入idListNew中
                 })
-                if (idListNew.includes(obj.id)) {
+                if (idListNew.includes(obj.id)) {//发生左递归
                     LeftRecursion=true
                 }
                 idList = idListNew.slice()
@@ -79,14 +81,13 @@ export default class Yacc{
         })
         return LeftRecursion;
     }
-    first(rules) {//返回文法组的第一个非终结符Array
+    firsts(rules) {//返回文法组的第一个非终结符组
         let res=[]
         rules.forEach(rule => {
             if (rule.length > 1 ) {//文法中至少有1个符号
-                if (!this.terminalSet.includes(rule[0])) {
+                if (!this.terminalSet.includes(rule[0])) {//第一个是非终结符
                     res.push(rule[0]);
                 }
-                
             }
         })
         return res
@@ -97,7 +98,8 @@ export default class Yacc{
      */
     ergodicRules(){
         let isWordFront=false; //是否递进
-        let beiObj=""
+        let beiObj = ""
+
         if(this.ruleStack.length<1){
             return "";
         }
@@ -120,11 +122,12 @@ export default class Yacc{
                     }else {
 
 
-                        if(isz>0&&isz>l-1&&l<rule.length-1){//这条文法有一部分匹配
-                          let  obj= this. embedded2(l,rule[l]);//递归为了判断接下来的词中，是否有符合rule[l]作为文法左值的情况
-                          if(obj!==false){
-                              stack.tem.push(obj)
-                          }
+                        if ((isz > 0) && (isz > l - 1) && (l < rule.length - 1) ) {//这条文法有一部分匹配
+                            this.embeddedLevels = 0;//初始化递归层数
+                            let  obj= this. embedded2(l,rule[l]);//递归为了判断接下来的词中，是否有符合rule[l]作为文法左值的情况
+                            if(obj!==false){
+                                stack.tem.push(obj)
+                            }
                             if(rule[l]==stack.tem[l]){
                                 isz++;
                             }
@@ -268,6 +271,9 @@ export default class Yacc{
         if (type == '名词A') {
             //debugger
         }
+        if (this.embeddedLevels > this.embeddedLevelsLimit) {
+            //debugger
+        }
         let rulez;
         let isWordFront=false; //是否递进
         let beiObj=""
@@ -303,7 +309,7 @@ export default class Yacc{
                 if(rule[l]==stack.tem[l]&&l<stack.tem.length){//判断tem中是否有
                     isz++;
                 }else {
-                    if (/*type != rule[l]  &&*/ l < stack.tem.length) {//匹配
+                    if (/*type != rule[l]  &&*/ (l < stack.tem.length) && (this.embeddedLevels <= this.embeddedLevelsLimit)) {//匹配
                         let is=  this.embedded2(l,rule[l])//递归为了判断接下来的词中，是否有符合rule[l]作为文法左值的情况
                         if(is!==false){
                             stack.tem.push(is)
@@ -330,7 +336,8 @@ export default class Yacc{
 
     }
 
-    embedded2(index,type){
+    embedded2(index, type) {
+        this.embeddedLevels++
         let temLength =stack.tem.length
 
 
@@ -340,6 +347,7 @@ export default class Yacc{
         if(obj==null){
            debugger
         }
+        this.embeddedLevels--
         return  obj
 
     }
