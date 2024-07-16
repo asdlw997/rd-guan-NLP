@@ -21,6 +21,7 @@ export default class Yacc{
         this.root = 0;
         this.input = [];//inputId说明,  0:wordsIds(分词结果) 1:ruleStack(文法) 
         this.output = [];//outputId说明 0:tree(语法树)
+        this.terminalSet = ['名词', '的', '和', '动词','符号']
     }
 
 
@@ -35,7 +36,8 @@ export default class Yacc{
         this.wordsIds = this.input[0];
         let ruleStack = this.input[1];
         let wordsIds = this.input[0];
-        let obj=this.ergodicRules()
+        this.LeftRecursionDetection(this.ruleStack)
+        let obj = this.ergodicRules()
         stack.tem.push(obj);
         for (; stack.n < wordsIds.length;) {//似乎一次循环会分析一个statement
 
@@ -53,7 +55,42 @@ export default class Yacc{
         this.output[0] = tree;
         return tree;
     }
+    LeftRecursionDetection(ruleStack) {
+        let LeftRecursion = false
+        //用广度优先算法遍历文法的第一个非终结符，直到出现终结符，返回所有的终结符和非终结符。
+        ruleStack.forEach(obj => {
+            let idList = [obj.id]
+            let idListNew = []
+            do {
 
+                idList.forEach(id => {
+                    let rules=[]
+                    let obj=ruleStack.find(obj => {
+                        return obj.id === id
+                    })
+                    idListNew.push(...this.first(obj.rules))
+                })
+                if (idListNew.includes(obj.id)) {
+                    LeftRecursion=true
+                }
+                idList = idListNew.slice()
+                idListNew=[]
+            } while (!LeftRecursion && idListNew.length>0)
+        })
+        return LeftRecursion;
+    }
+    first(rules) {//返回文法组的第一个非终结符Array
+        let res=[]
+        rules.forEach(rule => {
+            if (rule.length > 1 ) {//文法中至少有1个符号
+                if (!this.terminalSet.includes(rule[0])) {
+                    res.push(rule[0]);
+                }
+                
+            }
+        })
+        return res
+    }
     /**
      * 语法分析 从下往上 查找
      * @returns {string}
@@ -66,7 +103,7 @@ export default class Yacc{
         }
         for (let i = this.ruleStack.length; i > 0; i--) {//外层从下到上
             let rules=this.ruleStack[i-1];//取出一组文法
-            for(let n=rules.rules.length;n>0;n--){ //内层从下到上
+            for (let n = 1; n <= rules.rules.length; n++){ //内层从下到上
                 let rule = rules.rules[n - 1];//取出一组文法 的一条
                let isz=0;
                 for(let l=0;l<rule.length-1;l++) { //从左到右
@@ -78,12 +115,12 @@ export default class Yacc{
                         isWordFront=true;
                         this. wordFront()
                     }
-                    if(rule[l]==stack.tem[l]){
+                    if(rule[l]==stack.tem[l]){//匹配
                         isz++;
                     }else {
 
 
-                        if(isz>0&&isz>l-1&&l<rule.length-1){
+                        if(isz>0&&isz>l-1&&l<rule.length-1){//这条文法有一部分匹配
                           let  obj= this. embedded2(l,rule[l]);//递归为了判断接下来的词中，是否有符合rule[l]作为文法左值的情况
                           if(obj!==false){
                               stack.tem.push(obj)
@@ -213,11 +250,11 @@ export default class Yacc{
      */
     wordFront(){//新读入一个词
 
-        if(stack.n>this.wordsIds.length-1) return;
+        if(stack.n>this.wordsIds.length-1) return false;
         stack.tem.push( this.wordsIds[stack.n].type) 
         stack.objs.push(this.wordsIds[stack.n].data)
         stack.n++
-
+        return true
     }
 
     /**
@@ -225,7 +262,12 @@ export default class Yacc{
      * @param type
      * @returns {*}
      */
-    topToBottom(type){//type必须是文法中的左值
+    topToBottom(type) {//type必须是文法中的左值
+        console.log(type)
+        console.log(stack.tem)
+        if (type == '名词A') {
+            //debugger
+        }
         let rulez;
         let isWordFront=false; //是否递进
         let beiObj=""
@@ -242,7 +284,7 @@ export default class Yacc{
         }
 
 
-        for(let n=rulez.length;n>0;n--){//内层从下向上
+        for (let n = 1; n <= rulez.length;n++){//内层从下向上!
             let rule=rulez[n-1];//取出一组文法 的一条
             let isz=0;
             for(let l=0;l<rule.length-1;l++){//从左到右
@@ -250,14 +292,18 @@ export default class Yacc{
                     if(isWordFront===false){
                         beiObj= JSON.parse(JSON.stringify(stack));
                     }
-                    isWordFront=true;
-                    this. wordFront()
+                    isWordFront = true;
+                    let isReadSuccess = this.wordFront()
+                    if (!isReadSuccess) {
+                        continue
+                    }
+                    console.log('read word')
                 }
 
                 if(rule[l]==stack.tem[l]&&l<stack.tem.length){//判断tem中是否有
                     isz++;
                 }else {
-                    if(type != rule[l]&&l<stack.tem.length){
+                    if (/*type != rule[l]  &&*/ l < stack.tem.length) {//匹配
                         let is=  this.embedded2(l,rule[l])//递归为了判断接下来的词中，是否有符合rule[l]作为文法左值的情况
                         if(is!==false){
                             stack.tem.push(is)

@@ -133,7 +133,7 @@ let tokenizer = new Tokenizer();
 //"连接节点A的输入和节点B的输出，创建节点C。"
 //tokenizer.input[0] = "节点A和节点B。";
 
-tokenizer.input[0] = "创建节点A的输出。删除节点A。把节点A删除。";
+tokenizer.input[0] = "创建节点A的输出。删除节点A。把节点A删除。";//"创建节点A的输出。删除节点A。把节点A删除。"
 tokenizer.input[1] = dictionary.output[0];
 
 tokenizer.run();
