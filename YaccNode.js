@@ -22,8 +22,9 @@ export default class Yacc{
         this.input = [];//inputId说明,  0:wordsIds(分词结果) 1:ruleStack(文法) 
         this.output = [];//outputId说明 0:tree(语法树)
         this.terminalSet = ['名词', '的', '和', '动词', '符号']
+        this.isdetectLeftRecursion=true //是否检测左递归
         this.embeddedLevels = 0//当前嵌套等级
-        this.embeddedLevelsLimit = 10//嵌套等级限制
+        this.embeddedLevelsLimit = 20//嵌套等级限制
     }
 
 
@@ -38,7 +39,10 @@ export default class Yacc{
         this.wordsIds = this.input[0];
         let ruleStack = this.input[1];
         let wordsIds = this.input[0];
-        this.LeftRecursionDetection(this.ruleStack)
+        if (this.isdetectLeftRecursion) {
+            this.LeftRecursionDetection(this.ruleStack)
+        }
+        
         let obj = this.ergodicRules()
         stack.tem.push(obj);
         for (; stack.n < wordsIds.length;) {//似乎一次循环会分析一个statement

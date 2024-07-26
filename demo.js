@@ -82,6 +82,16 @@ debugger
 */
 let dictionary = new Dictionary();
 let woldFullInfo = [
+    ["名词1", "名词", "节点1(对象)", "O"],
+    ["名词2", "名词", "节点2(对象)", "O"],
+    ["名词3", "名词", "节点3(对象)", "O"],
+    ["名词4", "名词", "节点4(对象)", "O"],
+    ["动词5", "动词", "动词5(方法)", "M"],
+    ["动词6", "动词", "动词6(方法)", "M"],
+    ["名词7", "名词", "节点7(对象)", "O"],
+    ["名词8", "名词", "节点8(对象)", "O"],
+    ["名词9", "名词", "节点9(对象)", "O"],
+    ["名词10", "名词", "节点10(对象)", "O"],
     ["节点A", "名词", "节点A(对象)", "O"],
     ["节点B", "名词", "节点B(对象)", "O"],
     ["连接", "动词", "连接(方法)", "M"],
@@ -132,8 +142,8 @@ res = matchCriteria.isSynonyms('输出', '输入', module, dictionary);
 let tokenizer = new Tokenizer();
 //"连接节点A的输入和节点B的输出，创建节点C。"
 //tokenizer.input[0] = "节点A和节点B。";
-
-tokenizer.input[0] = "节点A节点A节点A。";//"创建节点A的输出。删除节点A。把节点A删除。"
+//名词1的名词2和名词3的名词4动词5和动词6名词7的名词8和名词9的名词10。
+tokenizer.input[0] = "名词10。";//节点A节点B节点A。节点A的节点B节点A和节点A。"创建节点A的输出。删除节点A。把节点A删除。"
 tokenizer.input[1] = dictionary.output[0];
 
 tokenizer.run();
@@ -150,11 +160,19 @@ yacc.input[1] = rulesSplit.rules;
 yacc.run();
 console.log("语法树是",JSON.stringify(yacc.output[0], null, 2))
 debugger
+//抽象语法树测试
+import SyntaxTree from './SyntaxTreeNode.js'
+let syntaxTree = new SyntaxTree();
+res = syntaxTree.Convert2SyntaxTree(yacc.output[0])
+debugger
+syntaxTree.Totriad(res[1][1])
+debugger
 //处理语法树
 let switch1 = new Switch();
 switch1.input[0] = yacc.output[0]
 switch1.run()
 tree1 = switch1.output[0]
+debugger
 //重复流程
 //创建节点B的输入。
 tokenizer.input[0] = "删除节点A。创建节点A的输出。创建节点A的输入。";
@@ -162,7 +180,7 @@ tokenizer.run();
 yacc.input[0] = tokenizer.output[0];
 yacc.run();
 switch1.input[0] = yacc.output[0]
-switch1.run();
+//switch1.run();
 tree2 = switch1.output[0]
 //debugger
 
@@ -188,7 +206,7 @@ command.input[0] = switch1.output[0]
 command.run()
 res = command.output[0]
 console.log("转指令是", JSON.stringify(command.output[0], null, 2))
-//debugger
+debugger
 
 //debugger
 //词典转领域

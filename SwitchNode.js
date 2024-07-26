@@ -86,6 +86,7 @@ export default class Switch{
                 id1=this.domain.addModule(  module);
                 return id1;
                 break;
+            case '主谓宾':
             case '把名词动词到名词':
                 module= new Module();
                 blk1 = this.genIntCode (root.data[0]);
@@ -93,7 +94,7 @@ export default class Switch{
                 blk2 = this.genIntCode (root.data[2]);
                 module.addUnit(new Unit('1'))
                 module.addUnit(new Unit(blk1, cond, blk2, "2"))//2表示跟动词相关
-                id1=this.domain.addData( module);
+                id1 = this.domain.addModule( module);
                 this.domain.moduleAddUnit(1,new Unit(id1))
                 return id1;
                 break;
