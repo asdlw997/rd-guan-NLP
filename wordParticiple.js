@@ -528,13 +528,12 @@ export class Tokenizer {
             if (nodeId === null) {
                 break;
             } else {
+                _str += character;
                 if (this.isWordEnd(nodeId)) {
-                    word = _str + character;
+                    word = _str;
                     wordEndIndex = nowIndex;
                     wordId = nodeId;
-                } else {
-                    _str += character;
-                }
+                } 
             }
         }
         return [word, wordId, wordEndIndex];

@@ -143,7 +143,7 @@ let tokenizer = new Tokenizer();
 //"连接节点A的输入和节点B的输出，创建节点C。"
 //tokenizer.input[0] = "节点A和节点B。";
 //名词1的名词2和名词3的名词4动词5和动词6名词7的名词8和名词9的名词10。
-tokenizer.input[0] = "名词10。";//节点A节点B节点A。节点A的节点B节点A和节点A。"创建节点A的输出。删除节点A。把节点A删除。"
+tokenizer.input[0] = "名词1的名词2和名词3的名词4动词5和动词6名词7的名词8和名词9的名词10。";//节点A节点B节点A。节点A的节点B节点A和节点A。"创建节点A的输出。删除节点A。把节点A删除。"
 tokenizer.input[1] = dictionary.output[0];
 
 tokenizer.run();
