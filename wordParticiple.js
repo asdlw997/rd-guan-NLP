@@ -486,10 +486,11 @@ export class Tokenizer {
         this.data = [];
         this.partSpeech = [];
         this.methodObj = [];
+        this.defaultpartSpeech = '名词'             //默认词性
     }
 
     formNoWordStr(noWordStr) {//不在词典的词的输出格式
-        return [noWordStr, "名词"];
+        return { type: this.defaultpartSpeech, data: noWordStr };
     }
     formWordStr(word, wordId) {//在词典的词的输出格式
         return {
