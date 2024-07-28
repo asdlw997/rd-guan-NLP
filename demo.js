@@ -147,7 +147,7 @@ let tokenizer = new Tokenizer();
 tokenizer.input[0] = "名词1是名词7。\
 名词1的名词2是名词7。\
 名词1是名词7的名词8。\
-名词1的名词2是名词7的名词8。\
+名词1的名词2是名词7的名词8 。\
 名词1动词5和动词6名词7。\
 名词1的名词2和名词3的名词4动词5名词7。\
 ";
@@ -174,8 +174,10 @@ import SyntaxTree from './SyntaxTreeNode.js'
 let syntaxTree = new SyntaxTree();
 res = syntaxTree.Convert2SyntaxTree(yacc.output[0])
 debugger
+import TripleConverter from './TripleConverterNode.js'
+let tripleConverter = new TripleConverter()
 res.slice(1).forEach(T => {
-    console.log(syntaxTree.Totriad(T[1]))
+    console.log(tripleConverter.Totriad(T[1]))
     console.log('。')
 })
 
