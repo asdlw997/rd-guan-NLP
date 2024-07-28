@@ -40,7 +40,10 @@ export default class Yacc{
         let ruleStack = this.input[1];
         let wordsIds = this.input[0];
         if (this.isdetectLeftRecursion) {
-            this.LeftRecursionDetection(this.ruleStack)
+            if (this.LeftRecursionDetection(this.ruleStack)) {//左递归检测
+                return '文法出现左递归'
+            }
+            
         }
         
         let obj = this.ergodicRules()
@@ -270,8 +273,8 @@ export default class Yacc{
      * @returns {*}
      */
     topToBottom(type) {//type必须是文法中的左值
-        console.log(type)
-        console.log(stack.tem)
+        //console.log(type)
+        //console.log(stack.tem)
         if (type == '名词A') {
             //debugger
         }
@@ -307,7 +310,7 @@ export default class Yacc{
                     if (!isReadSuccess) {
                         continue
                     }
-                    console.log('read word')
+                    //console.log('read word')
                 }
 
                 if(rule[l]==stack.tem[l]&&l<stack.tem.length){//判断tem中是否有
