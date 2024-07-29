@@ -54,7 +54,7 @@ export default class SyntaxTree {
         }
         embedded.call(this, root, SyntaxTreeListList)
         let SyntaxTreeList = SyntaxTreeListList[0]
-        debugger
+        //debugger
         return SyntaxTreeList
     }
     domain2listTypeDomain(domain) {

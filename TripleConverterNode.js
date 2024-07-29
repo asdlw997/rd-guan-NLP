@@ -1,9 +1,12 @@
 import Dictionary from "./wordParticiple.js";
+import KnowledgeGraph from "./KnowledgeGraph.js"
 export default class TripleConverter {
     constructor() {
         this.linkingVerbSet = ['是'] //系动词集合
         this.instantiationType = '实例化类型' //实例化类型 对应的文本
         this.dictionary = new Dictionary()
+        this.knowledgeGraph = new KnowledgeGraph()
+        
     }
     setDictionary(dictionary) {
         this.dictionary = dictionary;//复制引用！！！
@@ -113,6 +116,13 @@ export default class TripleConverter {
     nameNewDNoun(A, B) {//为新词命名
         let res = A + '的' + B
         //可在这加入在知识图谱中查找相应属性值
+        let originalScenes = this.knowledgeGraph.scenes;
+        this.knowledgeGraph.scenes = '空字符串'
+        let triads = this.knowledgeGraph.filterWithScenes('', A, '', B, '', '')
+        if (triads.length > 0) {
+            res = triads[0][5]//如果有多个结果 取第一个
+        }
+        this.knowledgeGraph.scenes = originalScenes
         return res
     }
     serializationDNoun(DNoun) {//序列化 的名词

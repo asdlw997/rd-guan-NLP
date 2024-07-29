@@ -144,9 +144,10 @@ let tokenizer = new Tokenizer();
 //"连接节点A的输入和节点B的输出，创建节点C。"
 //tokenizer.input[0] = "节点A和节点B。";
 //名词1的名词2和名词3的名词4动词5和动词6名词7的名词8和名词9的名词10。
-tokenizer.input[0] = "名词1是名词7。\
+tokenizer.input[0] = "名词1的名词2动词5名词7。\
 ";
-/*名词1的名词2是名词7。\
+/*名词1是名词7。\
+名词1的名词2是名词7。\
 名词1是名词7的名词8。\
 名词1的名词2是名词7的名词8 。\
 名词1动词5和动词6名词7。\
@@ -178,6 +179,9 @@ let SyntaxTreeList = syntaxTree.fromDomain(domain)
 debugger
 import TripleConverter from './TripleConverterNode.js'
 let tripleConverter = new TripleConverter()
+let knowledgeGraph = new KnowledgeGraph();
+tripleConverter.knowledgeGraph = knowledgeGraph
+knowledgeGraph.addTriad("网页编程", "名词1", "网页编程", "名词2", "网页编程", "知识图谱名词1的名词2")
 res.slice(1).forEach(T => {
     console.log(tripleConverter.Totriad(T[1]))
     console.log('。')
