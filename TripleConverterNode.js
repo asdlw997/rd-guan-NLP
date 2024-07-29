@@ -1,7 +1,12 @@
+import Dictionary from "./wordParticiple.js";
 export default class TripleConverter {
     constructor() {
         this.linkingVerbSet = ['是'] //系动词集合
         this.instantiationType = '实例化类型' //实例化类型 对应的文本
+        this.dictionary = new Dictionary()
+    }
+    setDictionary(dictionary) {
+        this.dictionary = dictionary;//复制引用！！！
     }
     Totriad(SPO) {
         let subjects = SPO[1], predicates = SPO[2], objects = SPO[3];

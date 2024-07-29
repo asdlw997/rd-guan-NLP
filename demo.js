@@ -145,13 +145,12 @@ let tokenizer = new Tokenizer();
 //tokenizer.input[0] = "节点A和节点B。";
 //名词1的名词2和名词3的名词4动词5和动词6名词7的名词8和名词9的名词10。
 tokenizer.input[0] = "名词1是名词7。\
-名词1的名词2是名词7。\
+";
+/*名词1的名词2是名词7。\
 名词1是名词7的名词8。\
 名词1的名词2是名词7的名词8 。\
 名词1动词5和动词6名词7。\
-名词1的名词2和名词3的名词4动词5名词7。\
-";
-/**/ 
+名词1的名词2和名词3的名词4动词5名词7。\*/ 
 //节点A节点B节点A。节点A的节点B节点A和节点A。"创建节点A的输出。删除节点A。把节点A删除。"
 tokenizer.input[1] = dictionary.output[0];
 
@@ -173,6 +172,9 @@ debugger
 import SyntaxTree from './SyntaxTreeNode.js'
 let syntaxTree = new SyntaxTree();
 res = syntaxTree.Convert2SyntaxTree(yacc.output[0])
+debugger
+domain = syntaxTree.toDomain(res)
+let SyntaxTreeList = syntaxTree.fromDomain(domain)
 debugger
 import TripleConverter from './TripleConverterNode.js'
 let tripleConverter = new TripleConverter()
