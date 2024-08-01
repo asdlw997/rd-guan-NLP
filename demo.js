@@ -82,16 +82,16 @@ debugger
 */
 let dictionary = new Dictionary();
 let woldFullInfo = [
-    ["名词1", "名词", "节点1(对象)", "O"],
-    ["名词2", "名词", "节点2(对象)", "O"],
-    ["名词3", "名词", "节点3(对象)", "O"],
-    ["名词4", "名词", "节点4(对象)", "O"],
+    ["名词1", "名词", "名词1(对象)", "O"],
+    ["名词2", "名词", "名词2(对象)", "O"],
+    ["名词3", "名词", "名词3(对象)", "O"],
+    ["名词4", "名词", "名词4(对象)", "O"],
     ["动词5", "动词", "动词5(方法)", "M"],
     ["动词6", "动词", "动词6(方法)", "M"],
-    ["名词7", "名词", "节点7(对象)", "O"],
-    ["名词8", "名词", "节点8(对象)", "O"],
-    ["名词9", "名词", "节点9(对象)", "O"],
-    ["名词10", "名词", "节点10(对象)", "O"],
+    ["名词7", "名词", "名词7(对象)", "O"],
+    ["名词8", "名词", "名词8(对象)", "O"],
+    ["名词9", "名词", "名词9(对象)", "O"],
+    ["名词10", "名词", "名词10(对象)", "O"],
     ["节点A", "名词", "节点A(对象)", "O"],
     ["节点B", "名词", "节点B(对象)", "O"],
     ["是", "动词", "是(方法)", "M"],
@@ -180,13 +180,19 @@ debugger
 import TripleConverter from './TripleConverterNode.js'
 let tripleConverter = new TripleConverter()
 let knowledgeGraph = new KnowledgeGraph();
+knowledgeGraph.setDictionary(dictionary)
 tripleConverter.knowledgeGraph = knowledgeGraph
+dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词1", "名词", "名词1(对象)", "O", "网页编程","实例")
+dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词2", "名词", "名词2(对象)", "O", "网页编程", "属性")
+dictionary.addWoldFullInfo_1part1methodObj_WithScenes("动词5", "名词", "动词5(方法)", "M", "网页编程", "关联关系")
+dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词7", "名词", "名词7(对象)", "O", "网页编程", "实例")
+//dictionary.addWoldFullInfo_1part1methodObj_WithScenes("知识图谱名词1的名词2", "名词", "知识图谱名词1的名词2(对象)", "O", "网页编程", "实例")
+tripleConverter.dictionary = dictionary
 knowledgeGraph.addTriad("网页编程", "名词1", "网页编程", "名词2", "网页编程", "知识图谱名词1的名词2")
-res.slice(1).forEach(T => {
-    console.log(tripleConverter.Totriad(T[1]))
-    console.log('。')
+let tripleList=res.slice(1).map(T => {
+    return tripleConverter.Totriad(T[1])
 })
-
+tripleConverter.confirmScene(tripleList[0])
 debugger
 //处理语法树
 let switch1 = new Switch();

@@ -139,4 +139,39 @@ export default class TripleConverter {
         })
         return res
     }
+    confirmScene(tripleList) {
+
+        let scenesList = tripleList.map(triple => {
+            let set1 = new Set(this.dictionary.listWordScenes(triple[0]))
+            let set2 = new Set(this.dictionary.listWordScenes(triple[1]))
+            let set3 = new Set(this.dictionary.listWordScenes(triple[2]))
+
+            const commonInAllThree = [...set1].filter(item => set2.has(item) && set3.has(item));
+            if (commonInAllThree.length > 0) {
+                return commonInAllThree[0];
+            }
+
+            // 如果没有三个集合共有的元素，则查找任意两个集合共有的元素
+            const commonInSet1AndSet2 = [...set1].filter(item => set2.has(item));
+            const commonInSet1AndSet3 = [...set1].filter(item => set3.has(item));
+            const commonInSet2AndSet3 = [...set2].filter(item => set3.has(item));
+
+            // 合并两个集合的交集结果，并去重
+            const combinedTwoSetsCommon = new Set([
+                ...commonInSet1AndSet2,
+                ...commonInSet1AndSet3,
+                ...commonInSet2AndSet3
+            ]);
+            if (combinedTwoSetsCommon.size > 0) {
+                return [...combinedTwoSetsCommon][0];
+            }
+            return this.dictionary.defaultScenes
+            
+        })
+        let res = []
+        for (let i = 0; i < tripleList.length; i++) {
+            res.push([scenesList[i], tripleList[i][0], scenesList[i], tripleList[i][1],scenesList[i], tripleList[i][2]])
+        }  
+        return res
+    }
 }
