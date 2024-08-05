@@ -1,12 +1,72 @@
-import Dictionary from "./wordParticiple.js";
+import Dictionary from "./Dictionary.js"
 import KnowledgeGraph from "./KnowledgeGraph.js"
 export default class TripleConverter {
     constructor() {
+        this.input = []//0 抽象语法树domain
+        this.output = []//0 三元组list
         this.linkingVerbSet = ['是'] //系动词集合
         this.instantiationType = '实例化类型' //实例化类型 对应的文本
         this.dictionary = new Dictionary()
         this.knowledgeGraph = new KnowledgeGraph()
-        
+        this.tripleMarkList=['主谓宾']
+        this.terminalSet = ['名词', '的', '和', '动词', '符号']//终结符集合
+    }
+    run() {
+        let domain = this.input[0]
+        let syntaxTreeList = this.fromDomain(domain)
+        let triadList=[]
+        let SPOList=this.filterSyntaxTree(syntaxTreeList)
+        SPOList.forEach(SPO => {
+            triadList.push(...this.Totriad(SPO))
+        })
+        this.output[0] = this.confirmScene(triadList)
+    }
+    fromDomain(domain) {
+        let listTypeDomain = this.domain2listTypeDomain(domain)
+        let SyntaxTreeListList = []
+        let root = listTypeDomain.find(listTypeModule => {
+            return (listTypeModule[0][2] === 0)
+        })
+        function embedded(listTypeModule, lastTreeNode) {
+            let treeNode = []
+            let [moduleId, moduleMark, lastmodule] = listTypeModule[0]
+            treeNode.push(moduleMark)
+            lastTreeNode.push(treeNode)
+            if (!this.terminalSet.includes(moduleMark)) {//非终结符
+                for (let i = 1; i < listTypeModule.length; i++) {
+                    let listTypeUnit = listTypeModule[i]
+                    let [nextModuleId, nextModuleMark] = listTypeUnit
+                    let nextlistTypeModule = listTypeDomain.find(listTypeModule => {
+                        return listTypeModule[0][0] === nextModuleId
+                    })
+                    embedded.call(this, nextlistTypeModule, treeNode)
+
+                }
+            }
+            else {
+                treeNode.push(listTypeModule[1])
+            }
+        }
+        embedded.call(this, root, SyntaxTreeListList)
+        let SyntaxTreeList = SyntaxTreeListList[0]
+        //debugger
+        return SyntaxTreeList
+    }
+    domain2listTypeDomain(domain) {
+        let listTypeDomain = []
+        for (let id = 2; id <= domain.current_id; id++) {
+            let listTypeModule = []
+            let module = domain.list[id]
+            listTypeDomain.push(listTypeModule)
+            module.list.forEach(unit => {
+                let listTypeUnit = []
+                listTypeUnit = unit.list.filter(bit => {
+                    return bit !== ''
+                })
+                listTypeModule.push(listTypeUnit)
+            })
+        }
+        return listTypeDomain
     }
     setDictionary(dictionary) {
         this.dictionary = dictionary;//复制引用！！！
@@ -171,6 +231,19 @@ export default class TripleConverter {
         let res = []
         for (let i = 0; i < tripleList.length; i++) {
             res.push([scenesList[i], tripleList[i][0], scenesList[i], tripleList[i][1],scenesList[i], tripleList[i][2]])
+        }  
+        return res
+    }
+   filterSyntaxTree(syntaxTreeList) {
+        let res=[]
+       for (let i = 1; i < syntaxTreeList.length; i++) {
+           if (syntaxTreeList[i][0] ==='statement_结构A')
+           for (let j = 1; j < syntaxTreeList[i].length; j++) {
+               if (this.tripleMarkList.includes(syntaxTreeList[i][j][0])) {
+                   res.push(syntaxTreeList[i][j])
+               }
+           }
+            
         }  
         return res
     }

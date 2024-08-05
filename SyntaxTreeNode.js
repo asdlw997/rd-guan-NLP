@@ -8,6 +8,12 @@ export default class SyntaxTree {
         this.EMPTY_STMT = 'EMPTY_STMT'//空
         this.terminalSet = ['名词', '的', '和', '动词', '符号']//终结符集合
     }
+    run() {
+        let concreteSyntaxTree=this.input[0]
+        let SyntaxTreeList = this.Convert2SyntaxTree(concreteSyntaxTree) 
+        let domain =this.toDomain(SyntaxTreeList)
+        this.output[0] = domain
+    }
     Convert2SyntaxTree(concreteSyntaxTree) {
 
         return this.embedded('', concreteSyntaxTree)
@@ -42,7 +48,7 @@ export default class SyntaxTree {
                     let listTypeUnit = listTypeModule[i]
                     let [nextModuleId, nextModuleMark] = listTypeUnit
                     let nextlistTypeModule=listTypeDomain.find(listTypeModule => {
-                        return listTypeModule[0][2]===nextModuleId
+                        return listTypeModule[0][0]===nextModuleId
                     })
                     embedded.call(this, nextlistTypeModule, treeNode)
                     

@@ -1,4 +1,5 @@
-import Dictionary, { Tokenizer } from "./wordParticiple.js"
+import   Tokenizer  from "./wordParticiple.js"
+import Dictionary from "./Dictionary.js"
 import Command from "./CommandNode.js"
 import RulesSplit from "./RulesSplitNode.js"
 import Yacc from "./YaccNode.js"
@@ -112,24 +113,14 @@ let woldFullInfo = [
 dictionary.input[0] = woldFullInfo;
 domain = new Domain();
 dictionary.input[1] = domain;
-/*
-dictionary.addWoldFullInfo("节点A", "名词", "节点A(对象)", "O");
-dictionary.addWoldFullInfo("节点B", "名词", "节点B(对象)", "O");
-dictionary.addWoldFullInfo("连接", "动词", "连接(方法)", "M");
-dictionary.addWoldFullInfo("连接", "动词", "连接(方法)", "O");
-dictionary.addWoldFullInfo("创建", "动词", "创建(方法)", "M");
-dictionary.addWoldFullInfo("删除", "动词", "删除(方法)", "M");
-dictionary.addWoldFullInfo("把", "把", "把结构", "C");
-dictionary.addWoldFullInfo("和", "和", "和结构", "C");
-dictionary.addWoldFullInfo("的", "的", "的结构", "C");
-dictionary.addWoldFullInfo("输入", "名词", "输入(对象)", "O");
-dictionary.addWoldFullInfo("输出", "名词", "输出(对象)", "O");
-dictionary.addWoldFullInfo(",", "符号", ",结构", "C");
-dictionary.addWoldFullInfo("，", "符号", "，结构", "C");
-dictionary.addWoldFullInfo("。", "符号", "。结构", "C");*/
+
 
 dictionary.run()
 let id = dictionary.findWordId('节点A')
+dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词1", "名词", "名词1(对象)", "O", "网页编程1", "实例")
+dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词2", "名词", "名词2(对象)", "O", "网页编程", "属性")
+dictionary.addWoldFullInfo_1part1methodObj_WithScenes("动词5", "名词", "动词5(方法)", "M", "网页编程", "关联关系")
+dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词7", "名词", "名词7(对象)", "O", "网页编程", "实例")
 //近义词
 let matchCriteria = new MatchCriteria();
 matchCriteria.input[0] = [['节点A', '节点B'], ['输入', '输出'], ['输出', '输入'], ['创建', '添加']];
@@ -172,27 +163,26 @@ debugger
 //抽象语法树测试
 import SyntaxTree from './SyntaxTreeNode.js'
 let syntaxTree = new SyntaxTree();
-res = syntaxTree.Convert2SyntaxTree(yacc.output[0])
+syntaxTree.input[0] = yacc.output[0]
+syntaxTree.run()
+res = syntaxTree.output[0]
 debugger
-domain = syntaxTree.toDomain(res)
-let SyntaxTreeList = syntaxTree.fromDomain(domain)
-debugger
+//转三元组测试
 import TripleConverter from './TripleConverterNode.js'
 let tripleConverter = new TripleConverter()
 let knowledgeGraph = new KnowledgeGraph();
 knowledgeGraph.setDictionary(dictionary)
+knowledgeGraph.addTriad("网页编程", "名词1", "网页编程", "名词2", "网页编程", "知识图谱名词1的名词2")
+
 tripleConverter.knowledgeGraph = knowledgeGraph
-dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词1", "名词", "名词1(对象)", "O", "网页编程","实例")
-dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词2", "名词", "名词2(对象)", "O", "网页编程", "属性")
-dictionary.addWoldFullInfo_1part1methodObj_WithScenes("动词5", "名词", "动词5(方法)", "M", "网页编程", "关联关系")
-dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词7", "名词", "名词7(对象)", "O", "网页编程", "实例")
+
 //dictionary.addWoldFullInfo_1part1methodObj_WithScenes("知识图谱名词1的名词2", "名词", "知识图谱名词1的名词2(对象)", "O", "网页编程", "实例")
 tripleConverter.dictionary = dictionary
-knowledgeGraph.addTriad("网页编程", "名词1", "网页编程", "名词2", "网页编程", "知识图谱名词1的名词2")
-let tripleList=res.slice(1).map(T => {
-    return tripleConverter.Totriad(T[1])
-})
-tripleConverter.confirmScene(tripleList[0])
+
+tripleConverter.input[0] = res
+tripleConverter.run()
+res = tripleConverter.output[0]
+console.log(res)
 debugger
 //处理语法树
 let switch1 = new Switch();

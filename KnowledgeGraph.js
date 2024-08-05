@@ -1,6 +1,6 @@
 import Module from "./str/Module.js";
 import Unit from "./str/Unit.js";
-import Dictionary from "./wordParticiple.js";
+import Dictionary from "./Dictionary.js"
 export default class KnowledgeGraph {
     constructor() {
         this.input = []//0 三元组表
