@@ -22,7 +22,7 @@ export default class Dictionary {//词典
     run() {
         this.fromDomain(this.input[1]);
         this.input[0].map((woldFullInfo) => {
-            this.addWoldFullInfo(...woldFullInfo)
+            this.addWoldFullInfo_1part1methodObj_WithScenes(...woldFullInfo)
         })
         this.output[0] = this.toDomain();
     }

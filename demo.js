@@ -108,33 +108,34 @@ let woldFullInfo = [
     ["输出", "名词", "输出(对象)", "O"],
     [",", "符号", ",结构", "C"],
     ["，", "符号", "，结构", "C"],
-    ["。", "符号", "。结构", "C"]
+    ["。", "符号", "。结构", "C"],
+    ["名词1", "名词", "名词1(对象)", "O", "网页编程1", "实例"],
+    ["名词2", "名词", "名词2(对象)", "O", "网页编程", "属性"],
+    ["动词5", "名词", "动词5(方法)", "M", "网页编程", "关联关系"],
+    ["名词7", "名词", "名词7(对象)", "O", "网页编程", "实例"],
 ]
-dictionary.input[0] = woldFullInfo;
 domain = new Domain();
-dictionary.input[1] = domain;
 
 
-dictionary.run()
-let id = dictionary.findWordId('节点A')
-dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词1", "名词", "名词1(对象)", "O", "网页编程1", "实例")
-dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词2", "名词", "名词2(对象)", "O", "网页编程", "属性")
-dictionary.addWoldFullInfo_1part1methodObj_WithScenes("动词5", "名词", "动词5(方法)", "M", "网页编程", "关联关系")
-dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词7", "名词", "名词7(对象)", "O", "网页编程", "实例")
-domain = dictionary.toDomain()
-let dictionary4=new Dictionary()
-dictionary4.fromDomain(domain)
-dictionary = dictionary4
-dictionary.output[0] = domain
+import Addword from './AddwordNode.js'
+let addword = new Addword()
+addword.input[0] = woldFullInfo;
+addword.input[1] = domain;
+addword.run()
 debugger
+
 //近义词
-let matchCriteria = new MatchCriteria();
-matchCriteria.input[0] = [['节点A', '节点B'], ['输入', '输出'], ['输出', '输入'], ['创建', '添加']];
-matchCriteria.input[1] = dictionary;
-module = matchCriteria.run()
+//let id = dictionary.findWordId('节点A')
+//dictionary.input[0] = woldFullInfo;
+//dictionary.input[1] = domain;
+//dictionary.run()
+//let matchCriteria = new MatchCriteria();
+//matchCriteria.input[0] = [['节点A', '节点B'], ['输入', '输出'], ['输出', '输入'], ['创建', '添加']];
+//matchCriteria.input[1] = dictionary;
+//module = matchCriteria.run()
 //debugger
-res = matchCriteria.isSynonyms('节点A', '输入', module, dictionary);
-res = matchCriteria.isSynonyms('输出', '输入', module, dictionary);
+//res = matchCriteria.isSynonyms('节点A', '输入', module, dictionary);
+//res = matchCriteria.isSynonyms('输出', '输入', module, dictionary);
 //debugger
 //Tokenizer节点
 let tokenizer = new Tokenizer();
@@ -150,7 +151,7 @@ tokenizer.input[0] = "名词1的名词2动词5名词7。\
 名词1动词5和动词6名词7。\
 名词1的名词2和名词3的名词4动词5名词7。\*/ 
 //节点A节点B节点A。节点A的节点B节点A和节点A。"创建节点A的输出。删除节点A。把节点A删除。"
-tokenizer.input[1] = dictionary.output[0];
+tokenizer.input[1] = addword.output[0];
 
 tokenizer.run();
 res = JSON.stringify(tokenizer.output[0], null, 2);
@@ -173,26 +174,30 @@ syntaxTree.input[0] = yacc.output[0]
 syntaxTree.run()
 res = syntaxTree.output[0]
 debugger
+//知识图谱测试
+import AddTriadList from './AddTriadListNode.js'
+let addTriadList = new AddTriadList()
+addTriadList.input[0] = [["网页编程", "名词1", "网页编程", "名词2", "网页编程", "知识图谱名词1的名词2"]]
+addTriadList.input[1] = addword.output[0]
+addTriadList.run()
+debugger
 //转三元组测试
 import TripleConverter from './TripleConverterNode.js'
 let tripleConverter = new TripleConverter()
-let knowledgeGraph = new KnowledgeGraph();
-knowledgeGraph.input[0] = [["网页编程", "名词1", "网页编程", "名词2", "网页编程", "知识图谱名词1的名词2"]]
-knowledgeGraph.input[1] = dictionary.output[0]
-
-//knowledgeGraph.addTriad("网页编程", "名词1", "网页编程", "名词2", "网页编程", "知识图谱名词1的名词2")
-knowledgeGraph.run()
-tripleConverter.knowledgeGraph = knowledgeGraph
+//tripleConverter.knowledgeGraph = knowledgeGraph
 
 //dictionary.addWoldFullInfo_1part1methodObj_WithScenes("知识图谱名词1的名词2", "名词", "知识图谱名词1的名词2(对象)", "O", "网页编程", "实例")
 //tripleConverter.dictionary = dictionary
 
 tripleConverter.input[0] = syntaxTree.output[0]
-tripleConverter.input[1] = knowledgeGraph.output[1]
-tripleConverter.input[2] = knowledgeGraph.output[0]
+tripleConverter.input[1] = addTriadList.output[1]
+tripleConverter.input[2] = addTriadList.output[0]
 tripleConverter.run()
 res = tripleConverter.output[0]
 console.log(res)
+
+debugger
+debugger
 debugger
 //处理语法树
 let switch1 = new Switch();
