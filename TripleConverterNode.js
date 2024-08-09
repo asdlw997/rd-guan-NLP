@@ -2,8 +2,8 @@ import Dictionary from "./Dictionary.js"
 import KnowledgeGraph from "./KnowledgeGraph.js"
 export default class TripleConverter {
     constructor() {
-        this.input = []//0 抽象语法树domain
-        this.output = []//0 三元组list
+        this.input = []//0 抽象语法树domain 1 词典领域 2 知识图谱module
+        this.output = []//0 三元组list 1 词典领域
         this.linkingVerbSet = ['是'] //系动词集合
         this.instantiationType = '实例化类型' //实例化类型 对应的文本
         this.dictionary = new Dictionary()
@@ -13,6 +13,8 @@ export default class TripleConverter {
     }
     run() {
         let domain = this.input[0]
+        this.dictionary.fromDomain(this.input[1])
+        this.knowledgeGraph.fromModule(this.input[2])
         let syntaxTreeList = this.fromDomain(domain)
         let triadList=[]
         let SPOList=this.filterSyntaxTree(syntaxTreeList)
@@ -20,6 +22,7 @@ export default class TripleConverter {
             triadList.push(...this.Totriad(SPO))
         })
         this.output[0] = this.confirmScene(triadList)
+        this.output[1] = this.dictionary.toDomain()
     }
     fromDomain(domain) {
         let listTypeDomain = this.domain2listTypeDomain(domain)

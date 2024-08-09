@@ -87,10 +87,24 @@ export default class Dictionary {//词典
             let unit = new Unit(...list);
             ModuleMethodObj.addUnit(unit);
         })
+        let ScenesObj = new Module();
+        this.scenes.map((obj) => {
+            let list = Object.values(obj);
+            let unit = new Unit(...list);
+            ScenesObj.addUnit(unit);
+        })
+        let RelatedInformationObj = new Module();
+        this.relatedInformation.map((obj) => {
+            let list = Object.values(obj);
+            let unit = new Unit(...list);
+            RelatedInformationObj.addUnit(unit);
+        })
         let domain = new Domain();
         domain.addModule(ModuleTree);
         domain.addModule(ModulePartSpeech);
         domain.addModule(ModuleMethodObj);
+        domain.addModule(ScenesObj);
+        domain.addModule(RelatedInformationObj);
         return domain;
     }
     fromDomain(domain) {
@@ -114,6 +128,20 @@ export default class Dictionary {//词典
         let ModuleMethodObj = domain.find(4);
         if (ModuleMethodObj !== null) {
             this.methodObj = ModuleMethodObj.list.map((unit) => {
+                let list = unit.list.map((value, index) => [keys[index], value])
+                return Object.fromEntries(list);
+            })
+        }
+        let ScenesObj = domain.find(5);
+        if (ScenesObj !== null) {
+            this.scenes = ScenesObj.list.map((unit) => {
+                let list = unit.list.map((value, index) => [keys[index], value])
+                return Object.fromEntries(list);
+            })
+        }
+        let RelatedInformationObj = domain.find(6);
+        if (RelatedInformationObj !== null) {
+            this.relatedInformation = RelatedInformationObj.list.map((unit) => {
                 let list = unit.list.map((value, index) => [keys[index], value])
                 return Object.fromEntries(list);
             })

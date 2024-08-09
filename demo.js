@@ -121,6 +121,12 @@ dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词1", "名词", "名�
 dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词2", "名词", "名词2(对象)", "O", "网页编程", "属性")
 dictionary.addWoldFullInfo_1part1methodObj_WithScenes("动词5", "名词", "动词5(方法)", "M", "网页编程", "关联关系")
 dictionary.addWoldFullInfo_1part1methodObj_WithScenes("名词7", "名词", "名词7(对象)", "O", "网页编程", "实例")
+domain = dictionary.toDomain()
+let dictionary4=new Dictionary()
+dictionary4.fromDomain(domain)
+dictionary = dictionary4
+dictionary.output[0] = domain
+debugger
 //近义词
 let matchCriteria = new MatchCriteria();
 matchCriteria.input[0] = [['节点A', '节点B'], ['输入', '输出'], ['输出', '输入'], ['创建', '添加']];
@@ -171,15 +177,19 @@ debugger
 import TripleConverter from './TripleConverterNode.js'
 let tripleConverter = new TripleConverter()
 let knowledgeGraph = new KnowledgeGraph();
-knowledgeGraph.setDictionary(dictionary)
-knowledgeGraph.addTriad("网页编程", "名词1", "网页编程", "名词2", "网页编程", "知识图谱名词1的名词2")
+knowledgeGraph.input[0] = [["网页编程", "名词1", "网页编程", "名词2", "网页编程", "知识图谱名词1的名词2"]]
+knowledgeGraph.input[1] = dictionary.output[0]
 
+//knowledgeGraph.addTriad("网页编程", "名词1", "网页编程", "名词2", "网页编程", "知识图谱名词1的名词2")
+knowledgeGraph.run()
 tripleConverter.knowledgeGraph = knowledgeGraph
 
 //dictionary.addWoldFullInfo_1part1methodObj_WithScenes("知识图谱名词1的名词2", "名词", "知识图谱名词1的名词2(对象)", "O", "网页编程", "实例")
-tripleConverter.dictionary = dictionary
+//tripleConverter.dictionary = dictionary
 
-tripleConverter.input[0] = res
+tripleConverter.input[0] = syntaxTree.output[0]
+tripleConverter.input[1] = knowledgeGraph.output[1]
+tripleConverter.input[2] = knowledgeGraph.output[0]
 tripleConverter.run()
 res = tripleConverter.output[0]
 console.log(res)

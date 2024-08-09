@@ -3,14 +3,22 @@ import Unit from "./str/Unit.js";
 import Dictionary from "./Dictionary.js"
 export default class KnowledgeGraph {
     constructor() {
-        this.input = []//0 三元组表
-        this.output = []//0 module
+        this.input = []//0 三元组表 1 词典领域
+        this.output = []//0 module 1 词典领域
         this.TriadsList = []
         this.dictionary = new Dictionary()
         this.scenes="" //“”：默认场景    “空字符串”：空字符串      “多一个参数”：新引进参数 
     }
     setDictionary(dictionary) {
         this.dictionary = dictionary;//复制引用！！！
+    }
+    run() {
+        this.dictionary.fromDomain(this.input[1]);
+        this.input[0].map((Triad) => {
+            this.addTriad(...Triad)
+        })
+        this.output[0] = this.toModule()
+        this.output[1] = this.dictionary.toDomain()
     }
     addTriad(scenes1, word1, scenes2, word2, scenes3, word3) {
         if (this.dictionary === undefined) {
