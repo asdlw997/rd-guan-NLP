@@ -6,45 +6,90 @@ export default class DimensionValidation {
 
         this.instantiationType = '实例化类型' //实例化类型 对应的文本
     }
+    compare(knowledgeGraph1, knowledgeGraph2, name) {
+        const children1 = this.getNextLevelDimensions(knowledgeGraph1, name);
+        const children2 = this.getNextLevelDimensions(knowledgeGraph2, name);
+        let stat=this.compareInfo(knowledgeGraph1, knowledgeGraph2, name)
+        for (const child of children2) {
+            stat = stat && this.compare(knowledgeGraph1, knowledgeGraph2, child);
+        }
+        return stat
+    }
+    compareInfo(knowledgeGraph1, knowledgeGraph2, name) {
+        let originalScenes1 = knowledgeGraph1.scenes
+        let originalScenes2 = knowledgeGraph2.scenes
+        knowledgeGraph1.scenes = '空字符串'
+        knowledgeGraph2.scenes = '空字符串'
+        let triads1, triads2
+        triads1 = knowledgeGraph1.filterWithScenes(this.dimensionNamespace, name, this.dimensionNamespace, this.instantiationType, this.dimensionNamespace, '')
+        triads2 = knowledgeGraph2.filterWithScenes(this.dimensionNamespace, name, this.dimensionNamespace, this.instantiationType, this.dimensionNamespace, '')
+        knowledgeGraph1.scenes = originalScenes1
+        knowledgeGraph2.scenes = originalScenes2
+        if (triads1.length === 0 || triads2.length === 0) {
+            return false
+        }
+        return true
+    }
     depthDetection(knowledgeGraph, name, type) {
-        let depth=1
-        let nameSet=new Set([name])
-        let flag = true
+        let info = this.computeTreeMetrics(knowledgeGraph, name)
+        return info
+    }
+    computeTreeMetrics(knowledgeGraph,node) {
+        if (!node) {
+            return { depth: 0, maxChildren: 0 };
+        }
+        
+        const children = this.getNextLevelDimensions(knowledgeGraph,node);
+        
+        if (children.length === 0) {
+            return { depth: 1, maxChildren: 0 };
+        }
+        
+        let maxChildDepth = 0;
+        let maxChildCount = 0;
+
+        for (const child of children) {
+            const childMetrics = this.computeTreeMetrics(knowledgeGraph, child);
+            maxChildDepth = Math.max(maxChildDepth, childMetrics.depth);
+            maxChildCount = Math.max(maxChildCount, childMetrics.maxChildren + 1);
+        }
+        
+        return {
+            depth: maxChildDepth + 1,
+            maxChildren: maxChildCount
+        };
+    }
+
+    getNextLevelDimensions(knowledgeGraph, name) {
         let originalScenes = knowledgeGraph.scenes
         knowledgeGraph.scenes = '空字符串'
-        do {
-            let nextLevelSet=new Set()
-            nameSet.forEach(name => {
-                let triads
-                triads = knowledgeGraph.filterWithScenes(this.dimensionNamespace, name, this.dimensionNamespace, this.instantiationType, this.dimensionNamespace, type)
-                if (triads.length === 0) {
-                    flag = false
-                    return
-                }
-                triads = knowledgeGraph.filterWithScenes(this.dimensionNamespace, name, this.dimensionNamespace, '连接', this.dimensionNamespace, '')
-                if (triads.length === 0) {
-                    flag=false
-                    return  
-                }
+        let triads
+        triads = knowledgeGraph.filterWithScenes(this.dimensionNamespace, name, this.dimensionNamespace, this.instantiationType, this.dimensionNamespace, '')
+        if (triads.length === 0) {
+            return []
+        }
+        triads = knowledgeGraph.filterWithScenes(this.dimensionNamespace, name, this.dimensionNamespace, '连接', this.dimensionNamespace, '')
+        if (triads.length === 0) {
+            return []
+        }
 
-                const linkSet = new Set(triads.map((triad => { return triad[5] })).flat());
-                triads = []
+        const linkSet = new Set(triads.map((triad => {
+            let triads = knowledgeGraph.filterWithScenes(this.dimensionNamespace, triad[1], this.dimensionNamespace, '优先级', this.dimensionNamespace, '')
+            if (triads.length === 0) {
+                return triad[5]
+            } else if (triads[0][5] === '低') {
+                return null
+            }
+            return triad[5]
+        })).flat());
+        triads = []
 
-                linkSet.forEach(link => {
-                    triads.push(...knowledgeGraph.filterWithScenes(this.dimensionNamespace, link, this.dimensionNamespace, '连接下游', this.dimensionNamespace, ''))
-                })
-                triads.map((triad => { return triad[5] })).flat().forEach(element => {
-                    nextLevelSet.add(element);
-                });
-                
-                
-            })
-            if (flag) depth = depth + 1
-            
-            nameSet = nextLevelSet
-        } while (flag)
+        linkSet.forEach(link => {
+            triads.push(...knowledgeGraph.filterWithScenes(this.dimensionNamespace, link, this.dimensionNamespace, '连接下游', this.dimensionNamespace, ''))
+        })
         knowledgeGraph.scenes = originalScenes
-        return depth
+        let res = (triads.map(triad => { return triad[5] })).flat()
+        return res
     }
     generalcheck(knowledgeGraph) {
         let stat=true

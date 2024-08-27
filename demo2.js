@@ -62,7 +62,7 @@ let TriadList1 = [['维度领域', '维度A', '维度领域', '实例化类型',
     ['维度领域', '维度B', '维度领域', '映射', '维度领域', '词典维度B'],
     ['维度领域', '维度C', '维度领域', '实例化类型', '维度领域', '维度'],
     ['维度领域', '维度C', '维度领域', '维度数字', '维度领域', '3'],
-    ['维度领域', '维度C', '维度领域', '映射', '维度领域', '词典维度C'],
+    ['维度领域', '维度C', '维度领域', '映射', '维度领域', '词典维度B'],
 ];
 let TriadList2 = [['维度领域', '词A', '维度领域', '实例化类型', '维度领域', '词'],
     ['维度领域', '词A', '维度领域', '维度数字', '维度领域', '35'],
@@ -101,9 +101,11 @@ let TriadList4 = [['维度领域', '维度A', '维度领域', '实例化类型',
     ['维度领域', '连接维度BD', '维度领域', '实例化类型', '维度领域', '维度连接'],
     ['维度领域', '连接维度BD', '维度领域', '连接上游', '维度领域', '维度B'],
     ['维度领域', '连接维度BD', '维度领域', '连接下游', '维度领域', '维度D'],
+    ['维度领域', '连接维度BD', '维度领域', '优先级', '维度领域', '低'],
     ['维度领域', '连接维度BE', '维度领域', '实例化类型', '维度领域', '维度连接'],
     ['维度领域', '连接维度BE', '维度领域', '连接上游', '维度领域', '维度B'],
     ['维度领域', '连接维度BE', '维度领域', '连接下游', '维度领域', '维度E'],
+    ['维度领域', '连接维度BE', '维度领域', '优先级', '维度领域', '低'],
     ['维度领域', '维度D', '维度领域', '实例化类型', '维度领域', '维度'],
     ['维度领域', '维度D', '维度领域', '维度数字', '维度领域', '3'],
     ['维度领域', '维度D', '维度领域', '映射', '维度领域', '词典维度D'],
@@ -111,6 +113,7 @@ let TriadList4 = [['维度领域', '维度A', '维度领域', '实例化类型',
     ['维度领域', '维度E', '维度领域', '维度数字', '维度领域', '3'],
     ['维度领域', '维度E', '维度领域', '映射', '维度领域', '词典维度E'],
 ];
+
 addTriadList.input[0] = TriadList1
 addTriadList.run()
 knowledgeGraph1.TriadsList=knowledgeGraph1.fromModule(addTriadList.output[0])
@@ -141,16 +144,24 @@ knowledgeGraph3.TriadsList = knowledgeGraph3.fromModule(addTriadList.output[0])
 
 res = dimensionValidation.generalcheck(knowledgeGraph3)
 debugger    
+
 addTriadList.input[0] = TriadList4
 addTriadList.run()
 knowledgeGraph4.TriadsList = knowledgeGraph4.fromModule(addTriadList.output[0])
 res = dimensionValidation.depthDetection(knowledgeGraph4, '维度A', '维度')
+res = dimensionValidation.depthDetection(knowledgeGraph4, '维度B')
+dimensionValidation.compareInfo(knowledgeGraph1, knowledgeGraph4, '维度A')
+res = dimensionValidation.compare(knowledgeGraph1, knowledgeGraph3, '维度A')
 debugger
+res = dimensionValidation.compare(knowledgeGraph1, knowledgeGraph4, '维度A')
+
+debugger
+
 let resList = []
 resList.push(dimensionValidation.validation(wordList1, threeDimensions1))
 resList.push(dimensionValidation.validation(wordList1, threeDimensions2))
 resList.push(dimensionValidation.validation(wordList2, threeDimensions2))
-res = dimensionValidation.productVerification(threeDimensions4)
+
 debugger
 dimensionValidation.validation1(wordList1, threeDimensions3)
 console.log(resList)
