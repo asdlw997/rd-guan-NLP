@@ -5,17 +5,41 @@ export default class DimensionValidation {
         this.dimensionNamespace = '维度领域'
 
         this.instantiationType = '实例化类型' //实例化类型 对应的文本
+        this.isPriorityWork=false
+    }
+    score(knowledgeGraph, name, type) {
+        let info =this.depthDetection(knowledgeGraph, name, type)
+        const thresholdA = 2, thresholdB = 2;
+        const penaltyA = info[0] > thresholdA ? Math.pow(info[0] - thresholdA, 2) : 0;
+        const penaltyB = info[1] > thresholdB ? Math.pow(info[1] - thresholdB, 2) : 0;
+        
+        const totalPenalty = 0.05 * penaltyA + 0.05 * penaltyB;
+        
+        const score = Math.max(0, 1 - totalPenalty);
+
+        return score;
     }
     compare(knowledgeGraph1, knowledgeGraph2, name) {
-        const children1 = this.getNextLevelDimensions(knowledgeGraph1, name);
-        const children2 = this.getNextLevelDimensions(knowledgeGraph2, name);
-        let stat=this.compareInfo(knowledgeGraph1, knowledgeGraph2, name)
-        for (const child of children2) {
-            stat = stat && this.compare(knowledgeGraph1, knowledgeGraph2, child);
-        }
-        return stat
+        let uniqueSet1 = new Set()
+        let uniqueSet2 = new Set()
+        this.compareEmbed(knowledgeGraph1, knowledgeGraph2, name, uniqueSet2)
+        this.compareEmbed(knowledgeGraph2, knowledgeGraph1, name, uniqueSet1)
+        return [uniqueSet1, uniqueSet2]
     }
-    compareInfo(knowledgeGraph1, knowledgeGraph2, name) {
+    compareEmbed(knowledgeGraph1, knowledgeGraph2, name,  uniqueSet2) {
+        
+        const children2 = this.getNextLevelDimensions(knowledgeGraph2, name);
+        
+        this.compareInfo(knowledgeGraph1, knowledgeGraph2, name, uniqueSet2)
+        for (const child of children2) {
+            this.compareEmbed(knowledgeGraph1, knowledgeGraph2, child, uniqueSet2);
+        }
+        
+    }
+    compareInfo(knowledgeGraph1, knowledgeGraph2, name, uniqueSet) {
+        if (uniqueSet === undefined) {
+            uniqueSet=new Set()
+        }
         let originalScenes1 = knowledgeGraph1.scenes
         let originalScenes2 = knowledgeGraph2.scenes
         knowledgeGraph1.scenes = '空字符串'
@@ -25,6 +49,9 @@ export default class DimensionValidation {
         triads2 = knowledgeGraph2.filterWithScenes(this.dimensionNamespace, name, this.dimensionNamespace, this.instantiationType, this.dimensionNamespace, '')
         knowledgeGraph1.scenes = originalScenes1
         knowledgeGraph2.scenes = originalScenes2
+        if (triads1.length === 0 && triads2.length === 1) {
+            uniqueSet.add(name)
+        }
         if (triads1.length === 0 || triads2.length === 0) {
             return false
         }
@@ -32,7 +59,7 @@ export default class DimensionValidation {
     }
     depthDetection(knowledgeGraph, name, type) {
         let info = this.computeTreeMetrics(knowledgeGraph, name)
-        return info
+        return [info.depth,info.maxChildren]
     }
     computeTreeMetrics(knowledgeGraph,node) {
         if (!node) {
@@ -46,12 +73,12 @@ export default class DimensionValidation {
         }
         
         let maxChildDepth = 0;
-        let maxChildCount = 0;
+        let maxChildCount = children.length;
 
         for (const child of children) {
             const childMetrics = this.computeTreeMetrics(knowledgeGraph, child);
             maxChildDepth = Math.max(maxChildDepth, childMetrics.depth);
-            maxChildCount = Math.max(maxChildCount, childMetrics.maxChildren + 1);
+            maxChildCount = Math.max(maxChildCount, childMetrics.maxChildren);
         }
         
         return {
@@ -72,16 +99,16 @@ export default class DimensionValidation {
         if (triads.length === 0) {
             return []
         }
-
-        const linkSet = new Set(triads.map((triad => {
-            let triads = knowledgeGraph.filterWithScenes(this.dimensionNamespace, triad[1], this.dimensionNamespace, '优先级', this.dimensionNamespace, '')
+        let linkSet= new Set()
+        triads.forEach(triad => {
+            let triads = knowledgeGraph.filterWithScenes(this.dimensionNamespace, triad[5], this.dimensionNamespace, '优先级', this.dimensionNamespace, '')
             if (triads.length === 0) {
-                return triad[5]
-            } else if (triads[0][5] === '低') {
-                return null
+                return linkSet.add(triad[5])
+            } else if (triads[0][5] === '低' && this.isPriorityWork===true) {
+                return 
             }
-            return triad[5]
-        })).flat());
+            return linkSet.add( triad[5])
+        });
         triads = []
 
         linkSet.forEach(link => {

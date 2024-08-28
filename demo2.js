@@ -149,12 +149,17 @@ addTriadList.input[0] = TriadList4
 addTriadList.run()
 knowledgeGraph4.TriadsList = knowledgeGraph4.fromModule(addTriadList.output[0])
 res = dimensionValidation.depthDetection(knowledgeGraph4, '维度A', '维度')
+debugger
 res = dimensionValidation.depthDetection(knowledgeGraph4, '维度B')
+debugger
 dimensionValidation.compareInfo(knowledgeGraph1, knowledgeGraph4, '维度A')
 res = dimensionValidation.compare(knowledgeGraph1, knowledgeGraph3, '维度A')
 debugger
 res = dimensionValidation.compare(knowledgeGraph1, knowledgeGraph4, '维度A')
-
+debugger
+res = dimensionValidation.compare(knowledgeGraph4, knowledgeGraph1, '维度A')
+debugger
+res = dimensionValidation.score(knowledgeGraph4, '维度A', '维度A')
 debugger
 
 let resList = []
